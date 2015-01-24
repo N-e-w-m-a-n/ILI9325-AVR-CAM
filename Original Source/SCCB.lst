@@ -1,0 +1,293 @@
+   1               		.file	"SCCB.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	InitSCCB
+  18               	InitSCCB:
+  19               	.LFB2:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 87B3      		in r24,55-32
+  25 0002 8660      		ori r24,lo8(6)
+  26 0004 87BB      		out 55-32,r24
+  27               	.LM3:
+  28 0006 88B3      		in r24,56-32
+  29 0008 8660      		ori r24,lo8(6)
+  30 000a 88BB      		out 56-32,r24
+  31               	/* epilogue start */
+  32               	.LM4:
+  33 000c 0895      		ret
+  34               	.LFE2:
+  36               	.global	SCCBreadByte
+  38               	SCCBreadByte:
+  39               	.LFB7:
+  40               	.LM5:
+  41 000e 0F93      		push r16
+  42 0010 1F93      		push r17
+  43               	/* prologue: function */
+  44               	/* frame size = 0 */
+  45               	.LM6:
+  46 0012 BA98      		cbi 55-32,2
+  47               	.LM7:
+  48 0014 84E6      		ldi r24,lo8(100)
+  49 0016 90E0      		ldi r25,hi8(100)
+  50 0018 0E94 0000 		call delay_us
+  51 001c 10E0      		ldi r17,lo8(0)
+  52               	.LVL0:
+  53 001e 08E0      		ldi r16,lo8(8)
+  54               	.LVL1:
+  55               	.L5:
+  56               	.LM8:
+  57 0020 84E6      		ldi r24,lo8(100)
+  58 0022 90E0      		ldi r25,hi8(100)
+  59 0024 0E94 0000 		call delay_us
+  60               	.LM9:
+  61 0028 C19A      		sbi 56-32,1
+  62               	.LM10:
+  63 002a 84E6      		ldi r24,lo8(100)
+  64 002c 90E0      		ldi r25,hi8(100)
+  65 002e 0E94 0000 		call delay_us
+  66               	.LM11:
+  67 0032 110F      		lsl r17
+  68               	.LM12:
+  69 0034 B299      		sbic 54-32,2
+  70               	.LM13:
+  71 0036 1F5F      		subi r17,lo8(-(1))
+  72               	.L4:
+  73               	.LM14:
+  74 0038 C198      		cbi 56-32,1
+  75               	.LM15:
+  76 003a 84E6      		ldi r24,lo8(100)
+  77 003c 90E0      		ldi r25,hi8(100)
+  78 003e 0E94 0000 		call delay_us
+  79               	.LM16:
+  80 0042 0150      		subi r16,lo8(-(-1))
+  81 0044 01F4      		brne .L5
+  82               	.LM17:
+  83 0046 BA9A      		sbi 55-32,2
+  84               	.LM18:
+  85 0048 812F      		mov r24,r17
+  86               	/* epilogue start */
+  87 004a 1F91      		pop r17
+  88               	.LVL2:
+  89 004c 0F91      		pop r16
+  90               	.LVL3:
+  91 004e 0895      		ret
+  92               	.LFE7:
+  94               	.global	SCCBwriteByte
+  96               	SCCBwriteByte:
+  97               	.LFB6:
+  98               	.LM19:
+  99               	.LVL4:
+ 100 0050 0F93      		push r16
+ 101 0052 1F93      		push r17
+ 102 0054 CF93      		push r28
+ 103 0056 DF93      		push r29
+ 104               	/* prologue: function */
+ 105               	/* frame size = 0 */
+ 106               	.LM20:
+ 107 0058 C0E0      		ldi r28,lo8(0)
+ 108 005a D0E0      		ldi r29,hi8(0)
+ 109               	.LM21:
+ 110 005c 082F      		mov r16,r24
+ 111 005e 10E0      		ldi r17,lo8(0)
+ 112               	.LVL5:
+ 113               	.L11:
+ 114 0060 C801      		movw r24,r16
+ 115 0062 0C2E      		mov r0,r28
+ 116 0064 00C0      		rjmp 2f
+ 117 0066 880F      	1:	lsl r24
+ 118 0068 991F      		rol r25
+ 119 006a 0A94      	2:	dec r0
+ 120 006c 02F4      		brpl 1b
+ 121 006e 87FF      		sbrs r24,7
+ 122 0070 00C0      		rjmp .L9
+ 123               	.LM22:
+ 124 0072 C29A      		sbi 56-32,2
+ 125 0074 00C0      		rjmp .L10
+ 126               	.L9:
+ 127               	.LM23:
+ 128 0076 C298      		cbi 56-32,2
+ 129               	.L10:
+ 130               	.LM24:
+ 131 0078 84E6      		ldi r24,lo8(100)
+ 132 007a 90E0      		ldi r25,hi8(100)
+ 133 007c 0E94 0000 		call delay_us
+ 134               	.LM25:
+ 135 0080 C19A      		sbi 56-32,1
+ 136               	.LM26:
+ 137 0082 84E6      		ldi r24,lo8(100)
+ 138 0084 90E0      		ldi r25,hi8(100)
+ 139 0086 0E94 0000 		call delay_us
+ 140               	.LM27:
+ 141 008a C198      		cbi 56-32,1
+ 142               	.LM28:
+ 143 008c 84E6      		ldi r24,lo8(100)
+ 144 008e 90E0      		ldi r25,hi8(100)
+ 145 0090 0E94 0000 		call delay_us
+ 146 0094 2196      		adiw r28,1
+ 147               	.LM29:
+ 148 0096 C830      		cpi r28,8
+ 149 0098 D105      		cpc r29,__zero_reg__
+ 150 009a 01F4      		brne .L11
+ 151               	.LM30:
+ 152 009c 84E6      		ldi r24,lo8(100)
+ 153 009e 90E0      		ldi r25,hi8(100)
+ 154 00a0 0E94 0000 		call delay_us
+ 155               	.LM31:
+ 156 00a4 BA98      		cbi 55-32,2
+ 157               	.LM32:
+ 158 00a6 84E6      		ldi r24,lo8(100)
+ 159 00a8 90E0      		ldi r25,hi8(100)
+ 160 00aa 0E94 0000 		call delay_us
+ 161               	.LM33:
+ 162 00ae C19A      		sbi 56-32,1
+ 163               	.LM34:
+ 164 00b0 88EE      		ldi r24,lo8(1000)
+ 165 00b2 93E0      		ldi r25,hi8(1000)
+ 166 00b4 0E94 0000 		call delay_us
+ 167               	.LM35:
+ 168 00b8 16B3      		in r17,54-32
+ 169               	.LVL6:
+ 170               	.LM36:
+ 171 00ba C198      		cbi 56-32,1
+ 172               	.LM37:
+ 173 00bc 84E6      		ldi r24,lo8(100)
+ 174 00be 90E0      		ldi r25,hi8(100)
+ 175 00c0 0E94 0000 		call delay_us
+ 176               	.LM38:
+ 177 00c4 BA9A      		sbi 55-32,2
+ 178 00c6 1695      		lsr r17
+ 179 00c8 1695      		lsr r17
+ 180 00ca 1095      		com r17
+ 181               	.LM39:
+ 182 00cc 812F      		mov r24,r17
+ 183 00ce 8170      		andi r24,lo8(1)
+ 184               	/* epilogue start */
+ 185 00d0 DF91      		pop r29
+ 186 00d2 CF91      		pop r28
+ 187 00d4 1F91      		pop r17
+ 188 00d6 0F91      		pop r16
+ 189               	.LVL7:
+ 190 00d8 0895      		ret
+ 191               	.LFE6:
+ 193               	.global	noAck
+ 195               	noAck:
+ 196               	.LFB5:
+ 197               	.LM40:
+ 198               	/* prologue: function */
+ 199               	/* frame size = 0 */
+ 200               	.LM41:
+ 201 00da C29A      		sbi 56-32,2
+ 202               	.LM42:
+ 203 00dc 84E6      		ldi r24,lo8(100)
+ 204 00de 90E0      		ldi r25,hi8(100)
+ 205 00e0 0E94 0000 		call delay_us
+ 206               	.LM43:
+ 207 00e4 C19A      		sbi 56-32,1
+ 208               	.LM44:
+ 209 00e6 84E6      		ldi r24,lo8(100)
+ 210 00e8 90E0      		ldi r25,hi8(100)
+ 211 00ea 0E94 0000 		call delay_us
+ 212               	.LM45:
+ 213 00ee C198      		cbi 56-32,1
+ 214               	.LM46:
+ 215 00f0 84E6      		ldi r24,lo8(100)
+ 216 00f2 90E0      		ldi r25,hi8(100)
+ 217 00f4 0E94 0000 		call delay_us
+ 218               	.LM47:
+ 219 00f8 C298      		cbi 56-32,2
+ 220               	.LM48:
+ 221 00fa 84E6      		ldi r24,lo8(100)
+ 222 00fc 90E0      		ldi r25,hi8(100)
+ 223 00fe 0E94 0000 		call delay_us
+ 224               	/* epilogue start */
+ 225               	.LM49:
+ 226 0102 0895      		ret
+ 227               	.LFE5:
+ 229               	.global	stopSCCB
+ 231               	stopSCCB:
+ 232               	.LFB4:
+ 233               	.LM50:
+ 234               	/* prologue: function */
+ 235               	/* frame size = 0 */
+ 236               	.LM51:
+ 237 0104 C298      		cbi 56-32,2
+ 238               	.LM52:
+ 239 0106 84E6      		ldi r24,lo8(100)
+ 240 0108 90E0      		ldi r25,hi8(100)
+ 241 010a 0E94 0000 		call delay_us
+ 242               	.LM53:
+ 243 010e C19A      		sbi 56-32,1
+ 244               	.LM54:
+ 245 0110 84E6      		ldi r24,lo8(100)
+ 246 0112 90E0      		ldi r25,hi8(100)
+ 247 0114 0E94 0000 		call delay_us
+ 248               	.LM55:
+ 249 0118 C29A      		sbi 56-32,2
+ 250               	.LM56:
+ 251 011a 84E6      		ldi r24,lo8(100)
+ 252 011c 90E0      		ldi r25,hi8(100)
+ 253 011e 0E94 0000 		call delay_us
+ 254               	/* epilogue start */
+ 255               	.LM57:
+ 256 0122 0895      		ret
+ 257               	.LFE4:
+ 259               	.global	startSCCB
+ 261               	startSCCB:
+ 262               	.LFB3:
+ 263               	.LM58:
+ 264               	/* prologue: function */
+ 265               	/* frame size = 0 */
+ 266               	.LM59:
+ 267 0124 C29A      		sbi 56-32,2
+ 268               	.LM60:
+ 269 0126 84E6      		ldi r24,lo8(100)
+ 270 0128 90E0      		ldi r25,hi8(100)
+ 271 012a 0E94 0000 		call delay_us
+ 272               	.LM61:
+ 273 012e C19A      		sbi 56-32,1
+ 274               	.LM62:
+ 275 0130 84E6      		ldi r24,lo8(100)
+ 276 0132 90E0      		ldi r25,hi8(100)
+ 277 0134 0E94 0000 		call delay_us
+ 278               	.LM63:
+ 279 0138 C298      		cbi 56-32,2
+ 280               	.LM64:
+ 281 013a 84E6      		ldi r24,lo8(100)
+ 282 013c 90E0      		ldi r25,hi8(100)
+ 283 013e 0E94 0000 		call delay_us
+ 284               	.LM65:
+ 285 0142 C198      		cbi 56-32,1
+ 286               	.LM66:
+ 287 0144 84E6      		ldi r24,lo8(100)
+ 288 0146 90E0      		ldi r25,hi8(100)
+ 289 0148 0E94 0000 		call delay_us
+ 290               	/* epilogue start */
+ 291               	.LM67:
+ 292 014c 0895      		ret
+ 293               	.LFE3:
+ 359               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 SCCB.c
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:2      *ABS*:0000003f __SREG__
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:3      *ABS*:0000003e __SP_H__
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:4      *ABS*:0000003d __SP_L__
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:5      *ABS*:00000034 __CCP__
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:18     .text:00000000 InitSCCB
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:38     .text:0000000e SCCBreadByte
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:96     .text:00000050 SCCBwriteByte
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:195    .text:000000da noAck
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:231    .text:00000104 stopSCCB
+C:\Users\Newman\AppData\Local\Temp/ccoLXdd6.s:261    .text:00000124 startSCCB
+
+UNDEFINED SYMBOLS
+delay_us

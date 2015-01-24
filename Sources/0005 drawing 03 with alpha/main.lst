@@ -1,0 +1,864 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	init
+  18               	init:
+  19               	.LFB12:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 8E9A      		sbi 49-32,6
+  25               	.LM3:
+  26 0002 B89A      		sbi 55-32,0
+  27               	.LM4:
+  28 0004 969A      		sbi 50-32,6
+  29               	.LM5:
+  30 0006 C098      		cbi 56-32,0
+  31               	.LM6:
+  32 0008 8D98      		cbi 49-32,5
+  33 000a 959A      		sbi 50-32,5
+  34               	.LM7:
+  35 000c 8FEF      		ldi r24,lo8(-1)
+  36 000e 84BB      		out 52-32,r24
+  37               	.LM8:
+  38 0010 0E94 0000 		call LCD_Init
+  39               	.LM9:
+  40 0014 0E94 0000 		call TOUCH_Reset
+  41               	/* epilogue start */
+  42               	.LM10:
+  43 0018 0895      		ret
+  44               	.LFE12:
+  46               	.global	idle_time
+  48               	idle_time:
+  49               	.LFB8:
+  50               	.LM11:
+  51 001a EF92      		push r14
+  52 001c 0F93      		push r16
+  53 001e 1F93      		push r17
+  54               	/* prologue: function */
+  55               	/* frame size = 0 */
+  56 0020 00C0      		rjmp .L4
+  57               	.L7:
+  58               	.LM12:
+  59 0022 80E0      		ldi r24,lo8(0)
+  60 0024 8599      		sbic 48-32,5
+  61 0026 00C0      		rjmp .L5
+  62 0028 1092 0000 		sts isDrawing,__zero_reg__
+  63               	.L6:
+  64               	.LM13:
+  65 002c 859B      		sbis 48-32,5
+  66 002e 00C0      		rjmp .L6
+  67               	.LM14:
+  68 0030 80E0      		ldi r24,lo8(0)
+  69 0032 90E0      		ldi r25,hi8(0)
+  70 0034 60E0      		ldi r22,lo8(0)
+  71 0036 70E0      		ldi r23,hi8(0)
+  72 0038 40E4      		ldi r20,lo8(320)
+  73 003a 51E0      		ldi r21,hi8(320)
+  74 003c 2EEC      		ldi r18,lo8(206)
+  75 003e 30E0      		ldi r19,hi8(206)
+  76 0040 00E0      		ldi r16,lo8(0)
+  77 0042 10E0      		ldi r17,hi8(0)
+  78 0044 EE24      		clr r14
+  79 0046 E394      		inc r14
+  80 0048 0E94 0000 		call LCD_DrawRectangle
+  81               	.L4:
+  82 004c 8091 0000 		lds r24,isDrawing
+  83               	.L5:
+  84               	.LM15:
+  85 0050 8399      		sbic 48-32,3
+  86 0052 00C0      		rjmp .L7
+  87 0054 8093 0000 		sts isDrawing,r24
+  88               	/* epilogue start */
+  89               	.LM16:
+  90 0058 1F91      		pop r17
+  91 005a 0F91      		pop r16
+  92 005c EF90      		pop r14
+  93 005e 0895      		ret
+  94               	.LFE8:
+  96               	.global	draw_color_bar
+  98               	draw_color_bar:
+  99               	.LFB10:
+ 100               	.LM17:
+ 101 0060 EF92      		push r14
+ 102 0062 0F93      		push r16
+ 103 0064 1F93      		push r17
+ 104               	/* prologue: function */
+ 105               	/* frame size = 0 */
+ 106               	.LM18:
+ 107 0066 80E0      		ldi r24,lo8(0)
+ 108 0068 90E0      		ldi r25,hi8(0)
+ 109 006a 6FEC      		ldi r22,lo8(207)
+ 110 006c 70E0      		ldi r23,hi8(207)
+ 111 006e 40E4      		ldi r20,lo8(320)
+ 112 0070 51E0      		ldi r21,hi8(320)
+ 113 0072 22E2      		ldi r18,lo8(34)
+ 114 0074 30E0      		ldi r19,hi8(34)
+ 115 0076 00E0      		ldi r16,lo8(0)
+ 116 0078 10E0      		ldi r17,hi8(0)
+ 117 007a EE24      		clr r14
+ 118 007c E394      		inc r14
+ 119 007e 0E94 0000 		call LCD_DrawRectangle
+ 120               	.LM19:
+ 121 0082 80E0      		ldi r24,lo8(0)
+ 122 0084 90E0      		ldi r25,hi8(0)
+ 123 0086 60E0      		ldi r22,lo8(0)
+ 124 0088 70E0      		ldi r23,hi8(0)
+ 125 008a 40E4      		ldi r20,lo8(320)
+ 126 008c 51E0      		ldi r21,hi8(320)
+ 127 008e 20EF      		ldi r18,lo8(240)
+ 128 0090 30E0      		ldi r19,hi8(240)
+ 129 0092 0E94 0000 		call LCD_SetBounds
+ 130               	.LM20:
+ 131 0096 80E0      		ldi r24,lo8(0)
+ 132 0098 90E0      		ldi r25,hi8(0)
+ 133 009a 6EEC      		ldi r22,lo8(206)
+ 134 009c 70E0      		ldi r23,hi8(206)
+ 135 009e 40E4      		ldi r20,lo8(320)
+ 136 00a0 51E0      		ldi r21,hi8(320)
+ 137 00a2 2EEC      		ldi r18,lo8(206)
+ 138 00a4 30E0      		ldi r19,hi8(206)
+ 139 00a6 0FEF      		ldi r16,lo8(-1)
+ 140 00a8 1FEF      		ldi r17,hi8(-1)
+ 141 00aa 0E94 0000 		call LCD_DrawLine
+ 142               	.LM21:
+ 143 00ae 00E0      		ldi r16,lo8(0)
+ 144 00b0 8091 0000 		lds r24,do_alpha
+ 145 00b4 8823      		tst r24
+ 146 00b6 01F4      		brne .L12
+ 147 00b8 01E0      		ldi r16,lo8(1)
+ 148               	.L12:
+ 149 00ba 81E1      		ldi r24,lo8(17)
+ 150 00bc 90E0      		ldi r25,hi8(17)
+ 151 00be 6CED      		ldi r22,lo8(220)
+ 152 00c0 70E0      		ldi r23,hi8(220)
+ 153 00c2 4BE0      		ldi r20,lo8(11)
+ 154 00c4 50E0      		ldi r21,hi8(11)
+ 155 00c6 2FEF      		ldi r18,lo8(-1)
+ 156 00c8 3FEF      		ldi r19,hi8(-1)
+ 157 00ca 0E94 0000 		call LCD_DrawCircle
+ 158               	.LM22:
+ 159 00ce 88E2      		ldi r24,lo8(40)
+ 160 00d0 90E0      		ldi r25,hi8(40)
+ 161 00d2 60ED      		ldi r22,lo8(208)
+ 162 00d4 70E0      		ldi r23,hi8(208)
+ 163 00d6 42E2      		ldi r20,lo8(34)
+ 164 00d8 50E0      		ldi r21,hi8(34)
+ 165 00da 2AE1      		ldi r18,lo8(26)
+ 166 00dc 30E0      		ldi r19,hi8(26)
+ 167 00de 00E0      		ldi r16,lo8(0)
+ 168 00e0 10E0      		ldi r17,hi8(0)
+ 169 00e2 EE24      		clr r14
+ 170 00e4 E394      		inc r14
+ 171 00e6 0E94 0000 		call LCD_DrawRectangle
+ 172               	.LM23:
+ 173 00ea 8BE4      		ldi r24,lo8(75)
+ 174 00ec 90E0      		ldi r25,hi8(75)
+ 175 00ee 60ED      		ldi r22,lo8(208)
+ 176 00f0 70E0      		ldi r23,hi8(208)
+ 177 00f2 42E2      		ldi r20,lo8(34)
+ 178 00f4 50E0      		ldi r21,hi8(34)
+ 179 00f6 2AE1      		ldi r18,lo8(26)
+ 180 00f8 30E0      		ldi r19,hi8(26)
+ 181 00fa 0FE1      		ldi r16,lo8(31)
+ 182 00fc 10E0      		ldi r17,hi8(31)
+ 183 00fe 0E94 0000 		call LCD_DrawRectangle
+ 184               	.LM24:
+ 185 0102 8EE6      		ldi r24,lo8(110)
+ 186 0104 90E0      		ldi r25,hi8(110)
+ 187 0106 60ED      		ldi r22,lo8(208)
+ 188 0108 70E0      		ldi r23,hi8(208)
+ 189 010a 42E2      		ldi r20,lo8(34)
+ 190 010c 50E0      		ldi r21,hi8(34)
+ 191 010e 2AE1      		ldi r18,lo8(26)
+ 192 0110 30E0      		ldi r19,hi8(26)
+ 193 0112 00EE      		ldi r16,lo8(2016)
+ 194 0114 17E0      		ldi r17,hi8(2016)
+ 195 0116 0E94 0000 		call LCD_DrawRectangle
+ 196               	.LM25:
+ 197 011a 81E9      		ldi r24,lo8(145)
+ 198 011c 90E0      		ldi r25,hi8(145)
+ 199 011e 60ED      		ldi r22,lo8(208)
+ 200 0120 70E0      		ldi r23,hi8(208)
+ 201 0122 42E2      		ldi r20,lo8(34)
+ 202 0124 50E0      		ldi r21,hi8(34)
+ 203 0126 2AE1      		ldi r18,lo8(26)
+ 204 0128 30E0      		ldi r19,hi8(26)
+ 205 012a 00E0      		ldi r16,lo8(-2048)
+ 206 012c 18EF      		ldi r17,hi8(-2048)
+ 207 012e 0E94 0000 		call LCD_DrawRectangle
+ 208               	.LM26:
+ 209 0132 84EB      		ldi r24,lo8(180)
+ 210 0134 90E0      		ldi r25,hi8(180)
+ 211 0136 60ED      		ldi r22,lo8(208)
+ 212 0138 70E0      		ldi r23,hi8(208)
+ 213 013a 42E2      		ldi r20,lo8(34)
+ 214 013c 50E0      		ldi r21,hi8(34)
+ 215 013e 2AE1      		ldi r18,lo8(26)
+ 216 0140 30E0      		ldi r19,hi8(26)
+ 217 0142 0FE1      		ldi r16,lo8(-2017)
+ 218 0144 18EF      		ldi r17,hi8(-2017)
+ 219 0146 0E94 0000 		call LCD_DrawRectangle
+ 220               	.LM27:
+ 221 014a 87ED      		ldi r24,lo8(215)
+ 222 014c 90E0      		ldi r25,hi8(215)
+ 223 014e 60ED      		ldi r22,lo8(208)
+ 224 0150 70E0      		ldi r23,hi8(208)
+ 225 0152 42E2      		ldi r20,lo8(34)
+ 226 0154 50E0      		ldi r21,hi8(34)
+ 227 0156 2AE1      		ldi r18,lo8(26)
+ 228 0158 30E0      		ldi r19,hi8(26)
+ 229 015a 00E0      		ldi r16,lo8(-1024)
+ 230 015c 1CEF      		ldi r17,hi8(-1024)
+ 231 015e 0E94 0000 		call LCD_DrawRectangle
+ 232               	.LM28:
+ 233 0162 8AEF      		ldi r24,lo8(250)
+ 234 0164 90E0      		ldi r25,hi8(250)
+ 235 0166 60ED      		ldi r22,lo8(208)
+ 236 0168 70E0      		ldi r23,hi8(208)
+ 237 016a 42E2      		ldi r20,lo8(34)
+ 238 016c 50E0      		ldi r21,hi8(34)
+ 239 016e 2AE1      		ldi r18,lo8(26)
+ 240 0170 30E0      		ldi r19,hi8(26)
+ 241 0172 00EE      		ldi r16,lo8(-32)
+ 242 0174 1FEF      		ldi r17,hi8(-32)
+ 243 0176 0E94 0000 		call LCD_DrawRectangle
+ 244               	.LM29:
+ 245 017a 8DE1      		ldi r24,lo8(285)
+ 246 017c 91E0      		ldi r25,hi8(285)
+ 247 017e 60ED      		ldi r22,lo8(208)
+ 248 0180 70E0      		ldi r23,hi8(208)
+ 249 0182 43E2      		ldi r20,lo8(35)
+ 250 0184 50E0      		ldi r21,hi8(35)
+ 251 0186 2AE1      		ldi r18,lo8(26)
+ 252 0188 30E0      		ldi r19,hi8(26)
+ 253 018a 0FEF      		ldi r16,lo8(-1)
+ 254 018c 1FEF      		ldi r17,hi8(-1)
+ 255 018e 0E94 0000 		call LCD_DrawRectangle
+ 256               	.LM30:
+ 257 0192 0091 0000 		lds r16,color
+ 258 0196 1091 0000 		lds r17,(color)+1
+ 259 019a 80E0      		ldi r24,lo8(0)
+ 260 019c 90E0      		ldi r25,hi8(0)
+ 261 019e 6BEE      		ldi r22,lo8(235)
+ 262 01a0 70E0      		ldi r23,hi8(235)
+ 263 01a2 40E4      		ldi r20,lo8(320)
+ 264 01a4 51E0      		ldi r21,hi8(320)
+ 265 01a6 25E0      		ldi r18,lo8(5)
+ 266 01a8 30E0      		ldi r19,hi8(5)
+ 267 01aa 0E94 0000 		call LCD_DrawRectangle
+ 268               	/* epilogue start */
+ 269               	.LM31:
+ 270 01ae 1F91      		pop r17
+ 271 01b0 0F91      		pop r16
+ 272 01b2 EF90      		pop r14
+ 273 01b4 0895      		ret
+ 274               	.LFE10:
+ 276               	.global	color_bar
+ 278               	color_bar:
+ 279               	.LFB11:
+ 280               	.LM32:
+ 281 01b6 EF92      		push r14
+ 282 01b8 0F93      		push r16
+ 283 01ba 1F93      		push r17
+ 284               	/* prologue: function */
+ 285               	/* frame size = 0 */
+ 286               	.LM33:
+ 287 01bc 8091 0000 		lds r24,x
+ 288 01c0 9091 0000 		lds r25,(x)+1
+ 289 01c4 8897      		sbiw r24,40
+ 290 01c6 04F4      		brge .L15
+ 291               	.LM34:
+ 292 01c8 90E0      		ldi r25,lo8(0)
+ 293 01ca 8091 0000 		lds r24,do_alpha
+ 294 01ce 8823      		tst r24
+ 295 01d0 01F4      		brne .L16
+ 296 01d2 91E0      		ldi r25,lo8(1)
+ 297               	.L16:
+ 298 01d4 9093 0000 		sts do_alpha,r25
+ 299               	.LM35:
+ 300 01d8 0E94 0000 		call draw_color_bar
+ 301               	.L17:
+ 302               	.LM36:
+ 303 01dc 839B      		sbis 48-32,3
+ 304 01de 00C0      		rjmp .L17
+ 305 01e0 00C0      		rjmp .L20
+ 306               	.L15:
+ 307               	.LM37:
+ 308 01e2 80E0      		ldi r24,lo8(0)
+ 309 01e4 90E0      		ldi r25,hi8(0)
+ 310 01e6 60E0      		ldi r22,lo8(0)
+ 311 01e8 70E0      		ldi r23,hi8(0)
+ 312 01ea 40E4      		ldi r20,lo8(320)
+ 313 01ec 51E0      		ldi r21,hi8(320)
+ 314 01ee 20EF      		ldi r18,lo8(240)
+ 315 01f0 30E0      		ldi r19,hi8(240)
+ 316 01f2 0E94 0000 		call LCD_SetBounds
+ 317               	.LM38:
+ 318 01f6 6091 0000 		lds r22,y
+ 319 01fa 7091 0000 		lds r23,(y)+1
+ 320 01fe 8091 0000 		lds r24,x
+ 321 0202 9091 0000 		lds r25,(x)+1
+ 322 0206 0E94 0000 		call LCD_GetPoint
+ 323 020a 8C01      		movw r16,r24
+ 324 020c 9093 0000 		sts (color)+1,r25
+ 325 0210 8093 0000 		sts color,r24
+ 326               	.LM39:
+ 327 0214 80E0      		ldi r24,lo8(0)
+ 328 0216 90E0      		ldi r25,hi8(0)
+ 329 0218 6BEE      		ldi r22,lo8(235)
+ 330 021a 70E0      		ldi r23,hi8(235)
+ 331 021c 40E4      		ldi r20,lo8(320)
+ 332 021e 51E0      		ldi r21,hi8(320)
+ 333 0220 25E0      		ldi r18,lo8(5)
+ 334 0222 30E0      		ldi r19,hi8(5)
+ 335 0224 EE24      		clr r14
+ 336 0226 E394      		inc r14
+ 337 0228 0E94 0000 		call LCD_DrawRectangle
+ 338               	.L19:
+ 339               	.LM40:
+ 340 022c 839B      		sbis 48-32,3
+ 341 022e 00C0      		rjmp .L19
+ 342               	.L20:
+ 343               	/* epilogue start */
+ 344               	.LM41:
+ 345 0230 1F91      		pop r17
+ 346 0232 0F91      		pop r16
+ 347 0234 EF90      		pop r14
+ 348 0236 0895      		ret
+ 349               	.LFE11:
+ 351               	.global	draw
+ 353               	draw:
+ 354               	.LFB9:
+ 355               	.LM42:
+ 356 0238 EF92      		push r14
+ 357 023a 0F93      		push r16
+ 358 023c 1F93      		push r17
+ 359               	/* prologue: function */
+ 360               	/* frame size = 0 */
+ 361               	.LM43:
+ 362 023e 8091 0000 		lds r24,isDrawing
+ 363 0242 8823      		tst r24
+ 364 0244 01F4      		brne .L24
+ 365               	.LM44:
+ 366 0246 81E0      		ldi r24,lo8(1)
+ 367 0248 8093 0000 		sts isDrawing,r24
+ 368               	.LM45:
+ 369 024c 8091 0000 		lds r24,x
+ 370 0250 9091 0000 		lds r25,(x)+1
+ 371 0254 9093 0000 		sts (last_x)+1,r25
+ 372 0258 8093 0000 		sts last_x,r24
+ 373               	.LM46:
+ 374 025c 8091 0000 		lds r24,y
+ 375 0260 9091 0000 		lds r25,(y)+1
+ 376 0264 9093 0000 		sts (last_y)+1,r25
+ 377 0268 8093 0000 		sts last_y,r24
+ 378               	.L24:
+ 379               	.LM47:
+ 380 026c 80E0      		ldi r24,lo8(0)
+ 381 026e 90E0      		ldi r25,hi8(0)
+ 382 0270 60E0      		ldi r22,lo8(0)
+ 383 0272 70E0      		ldi r23,hi8(0)
+ 384 0274 40E4      		ldi r20,lo8(320)
+ 385 0276 51E0      		ldi r21,hi8(320)
+ 386 0278 20EF      		ldi r18,lo8(240)
+ 387 027a 30E0      		ldi r19,hi8(240)
+ 388 027c 0E94 0000 		call LCD_SetBounds
+ 389               	.LM48:
+ 390 0280 8091 0000 		lds r24,do_alpha
+ 391 0284 E091 0000 		lds r30,x
+ 392 0288 F091 0000 		lds r31,(x)+1
+ 393 028c 6091 0000 		lds r22,y
+ 394 0290 7091 0000 		lds r23,(y)+1
+ 395 0294 4091 0000 		lds r20,last_x
+ 396 0298 5091 0000 		lds r21,(last_x)+1
+ 397 029c 2091 0000 		lds r18,last_y
+ 398 02a0 3091 0000 		lds r19,(last_y)+1
+ 399 02a4 0091 0000 		lds r16,color
+ 400 02a8 1091 0000 		lds r17,(color)+1
+ 401 02ac 8823      		tst r24
+ 402 02ae 01F4      		brne .+2
+ 403 02b0 00C0      		rjmp .L25
+ 404               	.LM49:
+ 405 02b2 CF01      		movw r24,r30
+ 406 02b4 E090 0000 		lds r14,alpha
+ 407 02b8 0E94 0000 		call LCD_DrawLineAlpha
+ 408               	.LM50:
+ 409 02bc 6091 0000 		lds r22,y
+ 410 02c0 7091 0000 		lds r23,(y)+1
+ 411 02c4 6F5F      		subi r22,lo8(-(1))
+ 412 02c6 7F4F      		sbci r23,hi8(-(1))
+ 413 02c8 4091 0000 		lds r20,last_x
+ 414 02cc 5091 0000 		lds r21,(last_x)+1
+ 415 02d0 2091 0000 		lds r18,last_y
+ 416 02d4 3091 0000 		lds r19,(last_y)+1
+ 417 02d8 2F5F      		subi r18,lo8(-(1))
+ 418 02da 3F4F      		sbci r19,hi8(-(1))
+ 419 02dc 0091 0000 		lds r16,color
+ 420 02e0 1091 0000 		lds r17,(color)+1
+ 421 02e4 8091 0000 		lds r24,x
+ 422 02e8 9091 0000 		lds r25,(x)+1
+ 423 02ec E090 0000 		lds r14,alpha
+ 424 02f0 0E94 0000 		call LCD_DrawLineAlpha
+ 425               	.LM51:
+ 426 02f4 6091 0000 		lds r22,y
+ 427 02f8 7091 0000 		lds r23,(y)+1
+ 428 02fc 6E5F      		subi r22,lo8(-(2))
+ 429 02fe 7F4F      		sbci r23,hi8(-(2))
+ 430 0300 4091 0000 		lds r20,last_x
+ 431 0304 5091 0000 		lds r21,(last_x)+1
+ 432 0308 2091 0000 		lds r18,last_y
+ 433 030c 3091 0000 		lds r19,(last_y)+1
+ 434 0310 2E5F      		subi r18,lo8(-(2))
+ 435 0312 3F4F      		sbci r19,hi8(-(2))
+ 436 0314 0091 0000 		lds r16,color
+ 437 0318 1091 0000 		lds r17,(color)+1
+ 438 031c 8091 0000 		lds r24,x
+ 439 0320 9091 0000 		lds r25,(x)+1
+ 440 0324 E090 0000 		lds r14,alpha
+ 441 0328 0E94 0000 		call LCD_DrawLineAlpha
+ 442               	.LM52:
+ 443 032c 8091 0000 		lds r24,x
+ 444 0330 9091 0000 		lds r25,(x)+1
+ 445 0334 6091 0000 		lds r22,y
+ 446 0338 7091 0000 		lds r23,(y)+1
+ 447 033c 4091 0000 		lds r20,last_x
+ 448 0340 5091 0000 		lds r21,(last_x)+1
+ 449 0344 4F5F      		subi r20,lo8(-(1))
+ 450 0346 5F4F      		sbci r21,hi8(-(1))
+ 451 0348 2091 0000 		lds r18,last_y
+ 452 034c 3091 0000 		lds r19,(last_y)+1
+ 453 0350 0091 0000 		lds r16,color
+ 454 0354 1091 0000 		lds r17,(color)+1
+ 455 0358 0196      		adiw r24,1
+ 456 035a E090 0000 		lds r14,alpha
+ 457 035e 0E94 0000 		call LCD_DrawLineAlpha
+ 458               	.LM53:
+ 459 0362 8091 0000 		lds r24,x
+ 460 0366 9091 0000 		lds r25,(x)+1
+ 461 036a 6091 0000 		lds r22,y
+ 462 036e 7091 0000 		lds r23,(y)+1
+ 463 0372 6F5F      		subi r22,lo8(-(1))
+ 464 0374 7F4F      		sbci r23,hi8(-(1))
+ 465 0376 4091 0000 		lds r20,last_x
+ 466 037a 5091 0000 		lds r21,(last_x)+1
+ 467 037e 4F5F      		subi r20,lo8(-(1))
+ 468 0380 5F4F      		sbci r21,hi8(-(1))
+ 469 0382 2091 0000 		lds r18,last_y
+ 470 0386 3091 0000 		lds r19,(last_y)+1
+ 471 038a 2F5F      		subi r18,lo8(-(1))
+ 472 038c 3F4F      		sbci r19,hi8(-(1))
+ 473 038e 0091 0000 		lds r16,color
+ 474 0392 1091 0000 		lds r17,(color)+1
+ 475 0396 0196      		adiw r24,1
+ 476 0398 E090 0000 		lds r14,alpha
+ 477 039c 0E94 0000 		call LCD_DrawLineAlpha
+ 478               	.LM54:
+ 479 03a0 8091 0000 		lds r24,x
+ 480 03a4 9091 0000 		lds r25,(x)+1
+ 481 03a8 6091 0000 		lds r22,y
+ 482 03ac 7091 0000 		lds r23,(y)+1
+ 483 03b0 6E5F      		subi r22,lo8(-(2))
+ 484 03b2 7F4F      		sbci r23,hi8(-(2))
+ 485 03b4 4091 0000 		lds r20,last_x
+ 486 03b8 5091 0000 		lds r21,(last_x)+1
+ 487 03bc 4F5F      		subi r20,lo8(-(1))
+ 488 03be 5F4F      		sbci r21,hi8(-(1))
+ 489 03c0 2091 0000 		lds r18,last_y
+ 490 03c4 3091 0000 		lds r19,(last_y)+1
+ 491 03c8 2E5F      		subi r18,lo8(-(2))
+ 492 03ca 3F4F      		sbci r19,hi8(-(2))
+ 493 03cc 0091 0000 		lds r16,color
+ 494 03d0 1091 0000 		lds r17,(color)+1
+ 495 03d4 0196      		adiw r24,1
+ 496 03d6 E090 0000 		lds r14,alpha
+ 497 03da 0E94 0000 		call LCD_DrawLineAlpha
+ 498               	.LM55:
+ 499 03de 8091 0000 		lds r24,x
+ 500 03e2 9091 0000 		lds r25,(x)+1
+ 501 03e6 6091 0000 		lds r22,y
+ 502 03ea 7091 0000 		lds r23,(y)+1
+ 503 03ee 4091 0000 		lds r20,last_x
+ 504 03f2 5091 0000 		lds r21,(last_x)+1
+ 505 03f6 4E5F      		subi r20,lo8(-(2))
+ 506 03f8 5F4F      		sbci r21,hi8(-(2))
+ 507 03fa 2091 0000 		lds r18,last_y
+ 508 03fe 3091 0000 		lds r19,(last_y)+1
+ 509 0402 0091 0000 		lds r16,color
+ 510 0406 1091 0000 		lds r17,(color)+1
+ 511 040a 0296      		adiw r24,2
+ 512 040c E090 0000 		lds r14,alpha
+ 513 0410 0E94 0000 		call LCD_DrawLineAlpha
+ 514               	.LM56:
+ 515 0414 8091 0000 		lds r24,x
+ 516 0418 9091 0000 		lds r25,(x)+1
+ 517 041c 6091 0000 		lds r22,y
+ 518 0420 7091 0000 		lds r23,(y)+1
+ 519 0424 6F5F      		subi r22,lo8(-(1))
+ 520 0426 7F4F      		sbci r23,hi8(-(1))
+ 521 0428 4091 0000 		lds r20,last_x
+ 522 042c 5091 0000 		lds r21,(last_x)+1
+ 523 0430 4E5F      		subi r20,lo8(-(2))
+ 524 0432 5F4F      		sbci r21,hi8(-(2))
+ 525 0434 2091 0000 		lds r18,last_y
+ 526 0438 3091 0000 		lds r19,(last_y)+1
+ 527 043c 2F5F      		subi r18,lo8(-(1))
+ 528 043e 3F4F      		sbci r19,hi8(-(1))
+ 529 0440 0091 0000 		lds r16,color
+ 530 0444 1091 0000 		lds r17,(color)+1
+ 531 0448 0296      		adiw r24,2
+ 532 044a E090 0000 		lds r14,alpha
+ 533 044e 0E94 0000 		call LCD_DrawLineAlpha
+ 534               	.LM57:
+ 535 0452 8091 0000 		lds r24,x
+ 536 0456 9091 0000 		lds r25,(x)+1
+ 537 045a 6091 0000 		lds r22,y
+ 538 045e 7091 0000 		lds r23,(y)+1
+ 539 0462 6E5F      		subi r22,lo8(-(2))
+ 540 0464 7F4F      		sbci r23,hi8(-(2))
+ 541 0466 4091 0000 		lds r20,last_x
+ 542 046a 5091 0000 		lds r21,(last_x)+1
+ 543 046e 4E5F      		subi r20,lo8(-(2))
+ 544 0470 5F4F      		sbci r21,hi8(-(2))
+ 545 0472 2091 0000 		lds r18,last_y
+ 546 0476 3091 0000 		lds r19,(last_y)+1
+ 547 047a 2E5F      		subi r18,lo8(-(2))
+ 548 047c 3F4F      		sbci r19,hi8(-(2))
+ 549 047e 0091 0000 		lds r16,color
+ 550 0482 1091 0000 		lds r17,(color)+1
+ 551 0486 0296      		adiw r24,2
+ 552 0488 E090 0000 		lds r14,alpha
+ 553 048c 0E94 0000 		call LCD_DrawLineAlpha
+ 554 0490 00C0      		rjmp .L26
+ 555               	.L25:
+ 556               	.LM58:
+ 557 0492 CF01      		movw r24,r30
+ 558 0494 0E94 0000 		call LCD_DrawLine
+ 559               	.LM59:
+ 560 0498 6091 0000 		lds r22,y
+ 561 049c 7091 0000 		lds r23,(y)+1
+ 562 04a0 6F5F      		subi r22,lo8(-(1))
+ 563 04a2 7F4F      		sbci r23,hi8(-(1))
+ 564 04a4 4091 0000 		lds r20,last_x
+ 565 04a8 5091 0000 		lds r21,(last_x)+1
+ 566 04ac 2091 0000 		lds r18,last_y
+ 567 04b0 3091 0000 		lds r19,(last_y)+1
+ 568 04b4 2F5F      		subi r18,lo8(-(1))
+ 569 04b6 3F4F      		sbci r19,hi8(-(1))
+ 570 04b8 0091 0000 		lds r16,color
+ 571 04bc 1091 0000 		lds r17,(color)+1
+ 572 04c0 8091 0000 		lds r24,x
+ 573 04c4 9091 0000 		lds r25,(x)+1
+ 574 04c8 0E94 0000 		call LCD_DrawLine
+ 575               	.LM60:
+ 576 04cc 8091 0000 		lds r24,x
+ 577 04d0 9091 0000 		lds r25,(x)+1
+ 578 04d4 6091 0000 		lds r22,y
+ 579 04d8 7091 0000 		lds r23,(y)+1
+ 580 04dc 4091 0000 		lds r20,last_x
+ 581 04e0 5091 0000 		lds r21,(last_x)+1
+ 582 04e4 4F5F      		subi r20,lo8(-(1))
+ 583 04e6 5F4F      		sbci r21,hi8(-(1))
+ 584 04e8 2091 0000 		lds r18,last_y
+ 585 04ec 3091 0000 		lds r19,(last_y)+1
+ 586 04f0 0091 0000 		lds r16,color
+ 587 04f4 1091 0000 		lds r17,(color)+1
+ 588 04f8 0196      		adiw r24,1
+ 589 04fa 0E94 0000 		call LCD_DrawLine
+ 590               	.LM61:
+ 591 04fe 8091 0000 		lds r24,x
+ 592 0502 9091 0000 		lds r25,(x)+1
+ 593 0506 6091 0000 		lds r22,y
+ 594 050a 7091 0000 		lds r23,(y)+1
+ 595 050e 6F5F      		subi r22,lo8(-(1))
+ 596 0510 7F4F      		sbci r23,hi8(-(1))
+ 597 0512 4091 0000 		lds r20,last_x
+ 598 0516 5091 0000 		lds r21,(last_x)+1
+ 599 051a 4F5F      		subi r20,lo8(-(1))
+ 600 051c 5F4F      		sbci r21,hi8(-(1))
+ 601 051e 2091 0000 		lds r18,last_y
+ 602 0522 3091 0000 		lds r19,(last_y)+1
+ 603 0526 2F5F      		subi r18,lo8(-(1))
+ 604 0528 3F4F      		sbci r19,hi8(-(1))
+ 605 052a 0091 0000 		lds r16,color
+ 606 052e 1091 0000 		lds r17,(color)+1
+ 607 0532 0196      		adiw r24,1
+ 608 0534 0E94 0000 		call LCD_DrawLine
+ 609               	.L26:
+ 610               	.LM62:
+ 611 0538 8091 0000 		lds r24,x
+ 612 053c 9091 0000 		lds r25,(x)+1
+ 613 0540 9093 0000 		sts (last_x)+1,r25
+ 614 0544 8093 0000 		sts last_x,r24
+ 615               	.LM63:
+ 616 0548 8091 0000 		lds r24,y
+ 617 054c 9091 0000 		lds r25,(y)+1
+ 618 0550 9093 0000 		sts (last_y)+1,r25
+ 619 0554 8093 0000 		sts last_y,r24
+ 620               	/* epilogue start */
+ 621               	.LM64:
+ 622 0558 1F91      		pop r17
+ 623 055a 0F91      		pop r16
+ 624 055c EF90      		pop r14
+ 625 055e 0895      		ret
+ 626               	.LFE9:
+ 628               		.data
+ 629               	.LC0:
+ 630 0000 204E 6577 		.string	" Newman's touch circles.. "
+ 630      6D61 6E27 
+ 630      7320 746F 
+ 630      7563 6820 
+ 630      6369 7263 
+ 631               		.text
+ 632               	.global	touch_circles
+ 634               	touch_circles:
+ 635               	.LFB7:
+ 636               	.LM65:
+ 637 0560 AF92      		push r10
+ 638 0562 BF92      		push r11
+ 639 0564 CF92      		push r12
+ 640 0566 DF92      		push r13
+ 641 0568 EF92      		push r14
+ 642 056a FF92      		push r15
+ 643 056c 0F93      		push r16
+ 644 056e 1F93      		push r17
+ 645 0570 DF93      		push r29
+ 646 0572 CF93      		push r28
+ 647 0574 CDB7      		in r28,__SP_L__
+ 648 0576 DEB7      		in r29,__SP_H__
+ 649 0578 C456      		subi r28,lo8(-(-100))
+ 650 057a D040      		sbci r29,hi8(-(-100))
+ 651 057c 0FB6      		in __tmp_reg__,__SREG__
+ 652 057e F894      		cli
+ 653 0580 DEBF      		out __SP_H__,r29
+ 654 0582 0FBE      		out __SREG__,__tmp_reg__
+ 655 0584 CDBF      		out __SP_L__,r28
+ 656               	/* prologue: function */
+ 657               	/* frame size = 100 */
+ 658               	.L29:
+ 659               	.LM66:
+ 660 0586 839B      		sbis 48-32,3
+ 661 0588 00C0      		rjmp .L29
+ 662               	.LM67:
+ 663 058a 87E3      		ldi r24,lo8(55)
+ 664 058c 90E0      		ldi r25,hi8(55)
+ 665 058e 6BE6      		ldi r22,lo8(107)
+ 666 0590 70E0      		ldi r23,hi8(107)
+ 667 0592 44ED      		ldi r20,lo8(212)
+ 668 0594 50E0      		ldi r21,hi8(212)
+ 669 0596 28E1      		ldi r18,lo8(24)
+ 670 0598 30E0      		ldi r19,hi8(24)
+ 671 059a 00E0      		ldi r16,lo8(-1024)
+ 672 059c 1CEF      		ldi r17,hi8(-1024)
+ 673 059e EE24      		clr r14
+ 674 05a0 0E94 0000 		call LCD_DrawRectangle
+ 675               	.LM68:
+ 676 05a4 86E3      		ldi r24,lo8(54)
+ 677 05a6 90E0      		ldi r25,hi8(54)
+ 678 05a8 6AE6      		ldi r22,lo8(106)
+ 679 05aa 70E0      		ldi r23,hi8(106)
+ 680 05ac 44ED      		ldi r20,lo8(212)
+ 681 05ae 50E0      		ldi r21,hi8(212)
+ 682 05b0 28E1      		ldi r18,lo8(24)
+ 683 05b2 30E0      		ldi r19,hi8(24)
+ 684 05b4 00EE      		ldi r16,lo8(-32)
+ 685 05b6 1FEF      		ldi r17,hi8(-32)
+ 686 05b8 0E94 0000 		call LCD_DrawRectangle
+ 687               	.LM69:
+ 688 05bc 8E01      		movw r16,r28
+ 689 05be 0F5F      		subi r16,lo8(-(1))
+ 690 05c0 1F4F      		sbci r17,hi8(-(1))
+ 691 05c2 C801      		movw r24,r16
+ 692 05c4 60E0      		ldi r22,lo8(.LC0)
+ 693 05c6 70E0      		ldi r23,hi8(.LC0)
+ 694 05c8 0E94 0000 		call strcpy
+ 695               	.LM70:
+ 696 05cc 88E3      		ldi r24,lo8(56)
+ 697 05ce 90E0      		ldi r25,hi8(56)
+ 698 05d0 6EE6      		ldi r22,lo8(110)
+ 699 05d2 70E0      		ldi r23,hi8(110)
+ 700 05d4 A801      		movw r20,r16
+ 701 05d6 20EE      		ldi r18,lo8(-32)
+ 702 05d8 3FEF      		ldi r19,hi8(-32)
+ 703 05da 00E0      		ldi r16,lo8(0)
+ 704 05dc 10E0      		ldi r17,hi8(0)
+ 705 05de 0E94 0000 		call LCD_WriteString
+ 706               	.L30:
+ 707               	.LM71:
+ 708 05e2 8399      		sbic 48-32,3
+ 709 05e4 00C0      		rjmp .L30
+ 710 05e6 00C0      		rjmp .L40
+ 711               	.LVL0:
+ 712               	.L32:
+ 713               	.LBB2:
+ 714               	.LM72:
+ 715 05e8 0E94 0000 		call rand
+ 716 05ec 8C01      		movw r16,r24
+ 717 05ee 0E94 0000 		call rand
+ 718 05f2 7C01      		movw r14,r24
+ 719 05f4 0E94 0000 		call rand
+ 720 05f8 6C01      		movw r12,r24
+ 721 05fa 0E94 0000 		call rand
+ 722 05fe 9C01      		movw r18,r24
+ 723 0600 C801      		movw r24,r16
+ 724 0602 6FE3      		ldi r22,lo8(319)
+ 725 0604 71E0      		ldi r23,hi8(319)
+ 726 0606 0E94 0000 		call __divmodhi4
+ 727 060a 8C01      		movw r16,r24
+ 728 060c C701      		movw r24,r14
+ 729 060e 6FEE      		ldi r22,lo8(239)
+ 730 0610 70E0      		ldi r23,hi8(239)
+ 731 0612 0E94 0000 		call __divmodhi4
+ 732 0616 FC01      		movw r30,r24
+ 733 0618 C601      		movw r24,r12
+ 734 061a 64E6      		ldi r22,lo8(100)
+ 735 061c 70E0      		ldi r23,hi8(100)
+ 736 061e 0E94 0000 		call __divmodhi4
+ 737 0622 AC01      		movw r20,r24
+ 738 0624 220F      		lsl r18
+ 739 0626 331F      		rol r19
+ 740 0628 C801      		movw r24,r16
+ 741 062a BF01      		movw r22,r30
+ 742 062c 01E0      		ldi r16,lo8(1)
+ 743 062e 0E94 0000 		call LCD_DrawCircle
+ 744               	.LM73:
+ 745 0632 0894      		sec
+ 746 0634 A11C      		adc r10,__zero_reg__
+ 747 0636 B11C      		adc r11,__zero_reg__
+ 748               	.L39:
+ 749 0638 8EE1      		ldi r24,lo8(30)
+ 750 063a A816      		cp r10,r24
+ 751 063c B104      		cpc r11,__zero_reg__
+ 752 063e 04F0      		brlt .L32
+ 753               	.L35:
+ 754               	.LBE2:
+ 755               	.LM74:
+ 756 0640 8399      		sbic 48-32,3
+ 757 0642 00C0      		rjmp .L35
+ 758               	.L40:
+ 759 0644 AA24      		clr r10
+ 760 0646 BB24      		clr r11
+ 761 0648 00C0      		rjmp .L39
+ 762               	.LFE7:
+ 764               	.global	main
+ 766               	main:
+ 767               	.LFB13:
+ 768               	.LM75:
+ 769               	/* prologue: function */
+ 770               	/* frame size = 0 */
+ 771               	.LM76:
+ 772 064a 0E94 0000 		call init
+ 773               	.LM77:
+ 774 064e 8599      		sbic 48-32,5
+ 775 0650 00C0      		rjmp .L42
+ 776               	.LM78:
+ 777 0652 0E94 0000 		call touch_circles
+ 778               	.L42:
+ 779               	.LM79:
+ 780 0656 80E0      		ldi r24,lo8(0)
+ 781 0658 90E0      		ldi r25,hi8(0)
+ 782 065a 0E94 0000 		call LCD_Clear
+ 783               	.LM80:
+ 784 065e 0E94 0000 		call draw_color_bar
+ 785               	.L48:
+ 786               	.LM81:
+ 787 0662 0E94 0000 		call idle_time
+ 788               	.LM82:
+ 789 0666 80E0      		ldi r24,lo8(x)
+ 790 0668 90E0      		ldi r25,hi8(x)
+ 791 066a 60E0      		ldi r22,lo8(y)
+ 792 066c 70E0      		ldi r23,hi8(y)
+ 793 066e 0E94 0000 		call TOUCH_Get
+ 794 0672 8823      		tst r24
+ 795 0674 01F0      		breq .L48
+ 796               	.LM83:
+ 797 0676 8091 0000 		lds r24,y
+ 798 067a 9091 0000 		lds r25,(y)+1
+ 799 067e 8D3C      		cpi r24,205
+ 800 0680 9105      		cpc r25,__zero_reg__
+ 801 0682 04F4      		brge .L44
+ 802               	.LM84:
+ 803 0684 0E94 0000 		call draw
+ 804 0688 00C0      		rjmp .L48
+ 805               	.L44:
+ 806               	.LM85:
+ 807 068a 8091 0000 		lds r24,isDrawing
+ 808 068e 8823      		tst r24
+ 809 0690 01F4      		brne .L48
+ 810               	.LM86:
+ 811 0692 0E94 0000 		call color_bar
+ 812 0696 00C0      		rjmp .L48
+ 813               	.LFE13:
+ 815               	.global	isDrawing
+ 816               	.global	isDrawing
+ 817               		.section .bss
+ 820               	isDrawing:
+ 821 0000 00        		.skip 1,0
+ 822               	.global	last_x
+ 823               	.global	last_x
+ 826               	last_x:
+ 827 0001 0000      		.skip 2,0
+ 828               	.global	last_y
+ 829               	.global	last_y
+ 832               	last_y:
+ 833 0003 0000      		.skip 2,0
+ 834               	.global	color
+ 835               		.data
+ 838               	color:
+ 839 001b FFFF      		.word	-1
+ 840               	.global	alpha
+ 843               	alpha:
+ 844 001d 0A        		.byte	10
+ 845               	.global	do_alpha
+ 848               	do_alpha:
+ 849 001e 01        		.byte	1
+ 850               		.comm x,2,1
+ 851               		.comm y,2,1
+ 924               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:2      *ABS*:0000003f __SREG__
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:3      *ABS*:0000003e __SP_H__
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:4      *ABS*:0000003d __SP_L__
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:5      *ABS*:00000034 __CCP__
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:18     .text:00000000 init
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:48     .text:0000001a idle_time
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:820    .bss:00000000 isDrawing
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:98     .text:00000060 draw_color_bar
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:848    .data:0000001e do_alpha
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:838    .data:0000001b color
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:278    .text:000001b6 color_bar
+                            *COM*:00000002 x
+                            *COM*:00000002 y
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:353    .text:00000238 draw
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:826    .bss:00000001 last_x
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:832    .bss:00000003 last_y
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:843    .data:0000001d alpha
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:634    .text:00000560 touch_circles
+C:\Users\x200\AppData\Local\Temp/ccnuUlA0.s:766    .text:0000064a main
+
+UNDEFINED SYMBOLS
+LCD_Init
+TOUCH_Reset
+LCD_DrawRectangle
+LCD_SetBounds
+LCD_DrawLine
+LCD_DrawCircle
+LCD_GetPoint
+LCD_DrawLineAlpha
+strcpy
+LCD_WriteString
+rand
+__divmodhi4
+LCD_Clear
+TOUCH_Get
+__do_copy_data
+__do_clear_bss

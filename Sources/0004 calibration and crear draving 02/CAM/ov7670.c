@@ -1,0 +1,308 @@
+/**********************************************
+//
+// OV7670 Camera module 640x320 library
+// 
+// Rewrite by Newman 02/2011
+//
+*//////////////////////////////////////////////
+
+// Includes
+//
+#include "ov7670.h"
+#include "SCCB.h"
+
+
+// Camera module registers for Init
+//
+#define CAM_CHANGE_REG_NUM 164
+const prog_char CAM_change_reg[CAM_CHANGE_REG_NUM][2] = {
+
+	// RGB output
+	//
+	{CAM_REG_TSLB,			0b00000100},	// [0]Auto output window, [3]UV swap (YUYV), [5]Negative image enable
+	{CAM_REG_COM15,			0b11010000},	// [5:4]RGB 565, [7:6]Output full range
+	{CAM_REG_COM7,			0b00010100},	// [4]QVGA selection, [2]RGB
+	
+	// Farame
+	//
+	{CAM_REG_HSTART,		0x16},			// Horizontal frame start
+	{CAM_REG_HSTOP,			0x04},			// Horizontal frame stop
+	{CAM_REG_HREF,			0b10000000},	// Low 3 bits [2:0]HSTART & [5:3]HSTOP
+	{CAM_REG_VSTRT,			0x02},			// Vertical frame start
+	{CAM_REG_VSTOP,			0x7b},			// Vertical frame stop
+	{CAM_REG_VREF,			0b00000110},	// Low 2 bits [1:0]VSTRT & [3:2]VSTOP
+//9	
+	// Scale
+	//
+	{CAM_REG_COM3,			0b00000000},	// [5:4]Tri-state output, [3]Scale enable, [2]DCW enable
+	{CAM_REG_COM14,			0b00000000},	// [4]Normal PCLK, [2:0]PCLK divided by 1
+	{CAM_REG_SCALING_XSC,	0x00},			// [7]No test output, [6:0]Horizontal scale factor
+	{CAM_REG_SCALING_YSC,	0x00},			// [7]No test output, [6:0]Vertical scale factor
+//13
+	// Gamma curve
+	//
+	{CAM_REG_SLOP,			0x20},			// Gamma curve Highest segment slope
+	{CAM_REG_GAM1,			0x1c},			// 1st segment
+	{CAM_REG_GAM2,			0x28},			// 2nd segment
+	{CAM_REG_GAM3,			0x3c},			// 3rd segment
+	{CAM_REG_GAM4,			0x55},			// 4td segment
+	{CAM_REG_GAM5,			0x68},			// 5td segment
+	{CAM_REG_GAM6,			0x76},			// 6td segment
+	{CAM_REG_GAM7,			0x80},			// 7td segment
+	{CAM_REG_GAM8,			0x88},			// 8td segment
+	{CAM_REG_GAM9,			0x8f},			// 9td segment
+	{CAM_REG_GAM10,			0x96},			// 10td segment
+	{CAM_REG_GAM11,			0xa3},			// 11td segment
+	{CAM_REG_GAM12,			0xaf},			// 12td segment
+	{CAM_REG_GAM13,			0xc4},			// 13td segment
+	{CAM_REG_GAM14,			0xd7},			// 14td segment
+	{CAM_REG_GAM15,			0xe8},			// 15td segment
+//29
+	//
+	//
+	{CAM_REG_COM8,			0b11100000},	// [7]Fast AGC/EAC, [6]EAC step size limited, [5]Banding filter ON
+	{CAM_REG_GAIN, 0x00},					// AGC - Gain control
+	{0x10, 0x00},
+	{0x0d, 0x00},
+	{0x14, 0x20},//0x38, limit the max gain
+	{0xa5, 0x05},
+	{0xab, 0x07},
+	{0x24, 0x75},
+	{0x25, 0x63},
+	{0x26, 0xA5},
+	{0x9f, 0x78},
+	{0xa0, 0x68},
+	{0xa1, 0x03},//0x0b,
+	{0xa6, 0xdf},//0xd8,
+	{0xa7, 0xdf},//0xd8,
+	{0xa8, 0xf0},
+	{0xa9, 0x90},
+	{0xaa, 0x94},
+	{0x13, 0xe5},
+	{0x0e, 0x61},
+	{0x0f, 0x4b},
+	{0x16, 0x02},
+	{0x1e, 0x37},//0x07,
+	{0x21, 0x02},
+	{0x22, 0x91},
+	{0x29, 0x07},
+	{0x33, 0x0b},
+	{0x35, 0x0b},
+	{0x37, 0x1d},
+	{0x38, 0x71},
+	{0x39, 0x2a},//
+	{0x3c, 0x78},
+	{0x4d, 0x40},
+	{0x4e, 0x20},
+	{0x69, 0x0c},///////////////////////
+	{0x6b, 0x80},//PLL
+	{0x74, 0x19},
+	{0x8d, 0x4f},
+	{0x8e, 0x00},
+	{0x8f, 0x00},
+	{0x90, 0x00},
+	{0x91, 0x00},
+	{0x92, 0x00},//0x19,//0x66
+	{0x96, 0x00},
+	{0x9a, 0x80},
+	{0xb0, 0x84},
+	{0xb1, 0x0c},
+	{0xb2, 0x0e},
+	{0xb3, 0x82},
+	{0xb8, 0x0a},
+	{0x43, 0x14},
+	{0x44, 0xf0},
+	{0x45, 0x34},
+	{0x46, 0x58},
+	{0x47, 0x28},
+	{0x48, 0x3a},
+	{0x59, 0x88},
+	{0x5a, 0x88},
+	{0x5b, 0x44},
+	{0x5c, 0x67},
+	{0x5d, 0x49},
+	{0x5e, 0x0e},
+	{0x64, 0x04},
+	{0x65, 0x20},
+	{0x66, 0x05},
+	{0x94, 0x04},
+	{0x95, 0x08},
+	{0x6c, 0x0a},
+	{0x6d, 0x55},
+	{0x6e, 0x11},
+	{0x6f, 0x9f},//0x9e for advance AWB
+	{0x6a, 0x40},
+	{0x01, 0x40},
+	{0x02, 0x40},
+	{0x13, 0xe7},
+	{0x15, 0x00},
+	{0x4f, 0x80},
+	{0x50, 0x80},
+	{0x51, 0x00},
+	{0x52, 0x22},
+	{0x53, 0x5e},
+	{0x54, 0x80},
+	{0x58, 0x9e},	
+	{0x41, 0x08},
+	{0x3f, 0x00},
+	{0x75, 0x05},
+	{0x76, 0xe1},
+	{0x4c, 0x00},
+	{0x77, 0x01},
+	{0x3d, 0xc2},	//0xc0,
+	{0x4b, 0x09},
+	{0xc9, 0x60},
+	{0x41, 0x38},
+	{0x56, 0x40},//0x40,  change according to Jim's request	
+	{0x34, 0x11},
+	{0x3b, 0x02},//0x00,//0x02,
+	{0xa4, 0x89},//0x88,
+	{0x96, 0x00},
+	{0x97, 0x30},
+	{0x98, 0x20},
+	{0x99, 0x30},
+	{0x9a, 0x84},
+	{0x9b, 0x29},
+	{0x9c, 0x03},
+	{0x9d, 0x4c},
+	{0x9e, 0x3f},
+	{0x78, 0x04},	
+	{0x79, 0x01},
+	{0xc8, 0xf0},
+	{0x79, 0x0f},
+	{0xc8, 0x00},
+	{0x79, 0x10},
+	{0xc8, 0x7e},
+	{0x79, 0x0a},
+	{0xc8, 0x80},
+	{0x79, 0x0b},
+	{0xc8, 0x01},
+	{0x79, 0x0c},
+	{0xc8, 0x0f},
+	{0x79, 0x0d},
+	{0xc8, 0x20},
+	{0x79, 0x09},
+	{0xc8, 0x80},
+	{0x79, 0x02},
+	{0xc8, 0xc0},
+	{0x79, 0x03},
+	{0xc8, 0x40},
+	{0x79, 0x05},
+	{0xc8, 0x30},
+	{0x79, 0x26},
+	{0x09, 0x03},
+	{0x55, 0x00},
+	{0x56, 0x40},	
+	{0x3b, 0x42},//0x82,//0xc0,//0xc2,	//night mode	
+};
+
+//////////////////////////////////
+//
+// CAM_WriteReg(regID, regData);
+//
+unsigned char CAM_WriteReg (unsigned char regID, unsigned char regData) {
+
+	// Write register ID
+	//
+	SCCB_Start();
+	
+	if (!SCCB_WriteByte(CAM_DEVICE_WRITE)) {
+		
+		SCCB_Stop();
+		return(false);
+	}
+	_delay_us(100);
+	
+  	if(!SCCB_WriteByte(regID)) {
+		
+		SCCB_Stop();
+		return(false);
+	}
+	_delay_us(100);
+	
+	// Write register data
+	//
+  	if(!SCCB_WriteByte(regData)) {
+		
+		SCCB_Stop();
+		return(false);
+	}
+  	SCCB_Stop();
+	
+  	return(true); // OK
+}
+
+/////////////////////////////////
+//
+// CAM_ReadReg(regID, *regData);
+//
+unsigned char CAM_ReadReg (unsigned char regID, unsigned char *regData) {
+	
+	// Write register ID
+	//
+	SCCB_Start();
+	
+	if(!SCCB_WriteByte(CAM_DEVICE_WRITE)) {
+		
+		SCCB_Stop();
+		return(false);
+	}
+	_delay_us(100);
+	
+  	if(!SCCB_WriteByte(regID)) {
+		
+		SCCB_Stop();
+		return(false);
+	}
+	SCCB_Stop();
+	
+	_delay_us(100);
+	
+	// Read register data
+	//
+	SCCB_Start();
+	
+	if(!SCCB_WriteByte(CAM_DEVICE_READ)) {
+		
+		SCCB_Stop();
+		return(false);
+	}
+	_delay_us(100);
+	
+  	*regData = SCCB_ReadByte();
+	
+  	SCCB_noAck();
+  	SCCB_Stop();
+	
+  	return(true); // OK
+}
+
+////////////////
+//
+// CAM_Init();
+//
+unsigned char CAM_Init (void) {
+
+	unsigned int regID;
+
+	// IO Init
+	//
+	SCCB_Init();
+
+	// Reset SCCB registers to default value
+	//
+	if(!CAM_WriteReg(CAM_REG_COM7, 0b10000000))
+		return false;
+	
+	_delay_ms(10);
+
+	// Initialization SCCB registers
+	//
+	for(regID = 0; regID < CAM_CHANGE_REG_NUM; regID++) {
+		
+		if(!CAM_WriteReg(pgm_read_byte(&CAM_change_reg[regID][0]), pgm_read_byte(&CAM_change_reg[regID][1])))
+			return false;
+	}
+
+	return true; // OK
+} 

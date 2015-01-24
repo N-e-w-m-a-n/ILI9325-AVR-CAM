@@ -1,0 +1,199 @@
+   1               		.file	"XPT2046.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	TOUCH_Reset
+  18               	TOUCH_Reset:
+  19               	.LFB6:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 C49A      		sbi 56-32,4
+  25               	.LM3:
+  26 0002 BC9A      		sbi 55-32,4
+  27               	.LM4:
+  28 0004 BF9A      		sbi 55-32,7
+  29               	.LM5:
+  30 0006 BD9A      		sbi 55-32,5
+  31               	.LM6:
+  32 0008 C69A      		sbi 56-32,6
+  33               	.LM7:
+  34 000a 80E5      		ldi r24,lo8(80)
+  35 000c 8DB9      		out 45-32,r24
+  36               	.LM8:
+  37 000e 8DB1      		in r24,45-32
+  38 0010 8360      		ori r24,lo8(3)
+  39 0012 8DB9      		out 45-32,r24
+  40               	.LM9:
+  41 0014 1EB8      		out 46-32,__zero_reg__
+  42               	.LM10:
+  43 0016 8EB1      		in r24,46-32
+  44               	.LVL0:
+  45               	/* epilogue start */
+  46               	.LM11:
+  47 0018 0895      		ret
+  48               	.LFE6:
+  50               	.global	TOUCH_Read
+  52               	TOUCH_Read:
+  53               	.LFB7:
+  54               	.LM12:
+  55               	.LVL1:
+  56               	/* prologue: function */
+  57               	/* frame size = 0 */
+  58 001a FC01      		movw r30,r24
+  59 001c DB01      		movw r26,r22
+  60               	.LM13:
+  61 001e C498      		cbi 56-32,4
+  62               	.LBB14:
+  63               	.LBB15:
+  64               	.LM14:
+  65 0020 80E9      		ldi r24,lo8(-112)
+  66               	.LVL2:
+  67 0022 8FB9      		out 47-32,r24
+  68               	.LVL3:
+  69               	.L4:
+  70               	.LM15:
+  71 0024 779B      		sbis 46-32,7
+  72 0026 00C0      		rjmp .L4
+  73               	.LM16:
+  74 0028 8FB1      		in r24,47-32
+  75               	.LBE15:
+  76               	.LBE14:
+  77               	.LBB16:
+  78               	.LBB17:
+  79               	.LM17:
+  80 002a 1FB8      		out 47-32,__zero_reg__
+  81               	.L5:
+  82               	.LM18:
+  83 002c 779B      		sbis 46-32,7
+  84 002e 00C0      		rjmp .L5
+  85               	.LM19:
+  86 0030 9FB1      		in r25,47-32
+  87               	.LBE17:
+  88               	.LBE16:
+  89               	.LBB18:
+  90               	.LBB19:
+  91               	.LM20:
+  92 0032 1FB8      		out 47-32,__zero_reg__
+  93               	.L6:
+  94               	.LM21:
+  95 0034 779B      		sbis 46-32,7
+  96 0036 00C0      		rjmp .L6
+  97               	.LM22:
+  98 0038 2FB1      		in r18,47-32
+  99               	.LBE19:
+ 100               	.LBE18:
+ 101               	.LBB20:
+ 102               	.LBB21:
+ 103               	.LM23:
+ 104 003a 80ED      		ldi r24,lo8(-48)
+ 105 003c 8FB9      		out 47-32,r24
+ 106               	.L7:
+ 107               	.LM24:
+ 108 003e 779B      		sbis 46-32,7
+ 109 0040 00C0      		rjmp .L7
+ 110               	.LM25:
+ 111 0042 8FB1      		in r24,47-32
+ 112               	.LBE21:
+ 113               	.LBE20:
+ 114               	.LBB22:
+ 115               	.LBB23:
+ 116               	.LM26:
+ 117 0044 1FB8      		out 47-32,__zero_reg__
+ 118               	.L8:
+ 119               	.LM27:
+ 120 0046 779B      		sbis 46-32,7
+ 121 0048 00C0      		rjmp .L8
+ 122               	.LM28:
+ 123 004a 6FB1      		in r22,47-32
+ 124               	.LBE23:
+ 125               	.LBE22:
+ 126               	.LBB24:
+ 127               	.LBB25:
+ 128               	.LM29:
+ 129 004c 1FB8      		out 47-32,__zero_reg__
+ 130               	.L9:
+ 131               	.LM30:
+ 132 004e 779B      		sbis 46-32,7
+ 133 0050 00C0      		rjmp .L9
+ 134               	.LM31:
+ 135 0052 4FB1      		in r20,47-32
+ 136               	.LBE25:
+ 137               	.LBE24:
+ 138               	.LM32:
+ 139 0054 C49A      		sbi 56-32,4
+ 140               	.LM33:
+ 141 0056 2695      		lsr r18
+ 142 0058 2695      		lsr r18
+ 143 005a 2695      		lsr r18
+ 144 005c 30E0      		ldi r19,lo8(0)
+ 145 005e 892F      		mov r24,r25
+ 146 0060 90E0      		ldi r25,lo8(0)
+ 147 0062 55E0      		ldi r21,5
+ 148 0064 880F      	1:	lsl r24
+ 149 0066 991F      		rol r25
+ 150 0068 5A95      		dec r21
+ 151 006a 01F4      		brne 1b
+ 152 006c 282B      		or r18,r24
+ 153 006e 392B      		or r19,r25
+ 154 0070 3183      		std Z+1,r19
+ 155 0072 2083      		st Z,r18
+ 156               	.LM34:
+ 157 0074 4695      		lsr r20
+ 158 0076 4695      		lsr r20
+ 159 0078 4695      		lsr r20
+ 160 007a 50E0      		ldi r21,lo8(0)
+ 161 007c 862F      		mov r24,r22
+ 162 007e 90E0      		ldi r25,lo8(0)
+ 163 0080 25E0      		ldi r18,5
+ 164 0082 880F      	1:	lsl r24
+ 165 0084 991F      		rol r25
+ 166 0086 2A95      		dec r18
+ 167 0088 01F4      		brne 1b
+ 168 008a 482B      		or r20,r24
+ 169 008c 592B      		or r21,r25
+ 170 008e 4D93      		st X+,r20
+ 171 0090 5C93      		st X,r21
+ 172               	/* epilogue start */
+ 173               	.LM35:
+ 174 0092 0895      		ret
+ 175               	.LFE7:
+ 177               	.global	TOUCH_ReadADC
+ 179               	TOUCH_ReadADC:
+ 180               	.LFB8:
+ 181               	.LM36:
+ 182               	.LVL4:
+ 183               	/* prologue: function */
+ 184               	/* frame size = 0 */
+ 185               	.LM37:
+ 186 0094 8FB9      		out 47-32,r24
+ 187               	.L18:
+ 188               	.LM38:
+ 189 0096 779B      		sbis 46-32,7
+ 190 0098 00C0      		rjmp .L18
+ 191               	.LM39:
+ 192 009a 8FB1      		in r24,47-32
+ 193               	.LVL5:
+ 194               	/* epilogue start */
+ 195               	.LM40:
+ 196 009c 0895      		ret
+ 197               	.LFE8:
+ 239               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 XPT2046.c
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:2      *ABS*:0000003f __SREG__
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:3      *ABS*:0000003e __SP_H__
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:4      *ABS*:0000003d __SP_L__
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:5      *ABS*:00000034 __CCP__
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:18     .text:00000000 TOUCH_Reset
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:52     .text:0000001a TOUCH_Read
+C:\Users\Newman\AppData\Local\Temp/ccX0mQ5H.s:179    .text:00000094 TOUCH_ReadADC
+
+NO UNDEFINED SYMBOLS

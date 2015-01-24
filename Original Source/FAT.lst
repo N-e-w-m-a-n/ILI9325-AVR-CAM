@@ -1,0 +1,1779 @@
+   1               		.file	"FAT.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	FAT_LoadPartCluster
+  18               	FAT_LoadPartCluster:
+  19               	.LFB4:
+  20               	.LM1:
+  21               	.LVL0:
+  22 0000 CF92      		push r12
+  23 0002 DF92      		push r13
+  24 0004 EF92      		push r14
+  25 0006 FF92      		push r15
+  26 0008 0F93      		push r16
+  27 000a 1F93      		push r17
+  28               	/* prologue: function */
+  29               	/* frame size = 0 */
+  30 000c 7A01      		movw r14,r20
+  31 000e 6901      		movw r12,r18
+  32               	.LM2:
+  33 0010 6250      		subi r22,lo8(-(-2))
+  34 0012 7040      		sbci r23,hi8(-(-2))
+  35 0014 8040      		sbci r24,hlo8(-(-2))
+  36 0016 9040      		sbci r25,hhi8(-(-2))
+  37               	.LVL1:
+  38 0018 2091 0000 		lds r18,SectorsPerClust
+  39 001c 3091 0000 		lds r19,(SectorsPerClust)+1
+  40               	.LVL2:
+  41 0020 40E0      		ldi r20,lo8(0)
+  42 0022 50E0      		ldi r21,hi8(0)
+  43               	.LVL3:
+  44 0024 0E94 0000 		call __mulsi3
+  45               	.LVL4:
+  46 0028 00E0      		ldi r16,lo8(0)
+  47 002a 10E0      		ldi r17,hi8(0)
+  48               	.LVL5:
+  49 002c E60E      		add r14,r22
+  50 002e F71E      		adc r15,r23
+  51 0030 081F      		adc r16,r24
+  52 0032 191F      		adc r17,r25
+  53               	.LVL6:
+  54 0034 6091 0000 		lds r22,FirstDataSector
+  55 0038 7091 0000 		lds r23,(FirstDataSector)+1
+  56 003c 8091 0000 		lds r24,(FirstDataSector)+2
+  57 0040 9091 0000 		lds r25,(FirstDataSector)+3
+  58 0044 6E0D      		add r22,r14
+  59 0046 7F1D      		adc r23,r15
+  60 0048 801F      		adc r24,r16
+  61 004a 911F      		adc r25,r17
+  62 004c E091 0000 		lds r30,FAT_ReadSector
+  63 0050 F091 0000 		lds r31,(FAT_ReadSector)+1
+  64 0054 A601      		movw r20,r12
+  65 0056 0995      		icall
+  66 0058 8111      		cpse r24,__zero_reg__
+  67 005a 81E0      		ldi r24,lo8(1)
+  68               	.L2:
+  69               	/* epilogue start */
+  70               	.LM3:
+  71 005c 1F91      		pop r17
+  72 005e 0F91      		pop r16
+  73               	.LVL7:
+  74 0060 FF90      		pop r15
+  75 0062 EF90      		pop r14
+  76               	.LVL8:
+  77 0064 DF90      		pop r13
+  78 0066 CF90      		pop r12
+  79               	.LVL9:
+  80 0068 0895      		ret
+  81               	.LFE4:
+  83               	.global	FAT_NextCluster
+  85               	FAT_NextCluster:
+  86               	.LFB5:
+  87               	.LM4:
+  88               	.LVL10:
+  89 006a CF92      		push r12
+  90 006c DF92      		push r13
+  91 006e EF92      		push r14
+  92 0070 FF92      		push r15
+  93 0072 0F93      		push r16
+  94 0074 1F93      		push r17
+  95 0076 DF93      		push r29
+  96 0078 CF93      		push r28
+  97 007a CDB7      		in r28,__SP_L__
+  98 007c DEB7      		in r29,__SP_H__
+  99 007e C050      		subi r28,lo8(-(-512))
+ 100 0080 D240      		sbci r29,hi8(-(-512))
+ 101 0082 0FB6      		in __tmp_reg__,__SREG__
+ 102 0084 F894      		cli
+ 103 0086 DEBF      		out __SP_H__,r29
+ 104 0088 0FBE      		out __SREG__,__tmp_reg__
+ 105 008a CDBF      		out __SP_L__,r28
+ 106               	/* prologue: function */
+ 107               	/* frame size = 512 */
+ 108 008c 7B01      		movw r14,r22
+ 109 008e 8C01      		movw r16,r24
+ 110               	.LM5:
+ 111 0090 8091 0000 		lds r24,FAT32_Enable
+ 112 0094 8823      		tst r24
+ 113 0096 01F0      		breq .L5
+ 114               	.LVL11:
+ 115 0098 A801      		movw r20,r16
+ 116 009a 9701      		movw r18,r14
+ 117               	.LVL12:
+ 118 009c 67E0      		ldi r22,7
+ 119 009e 5695      	1:	lsr r21
+ 120 00a0 4795      		ror r20
+ 121 00a2 3795      		ror r19
+ 122 00a4 2795      		ror r18
+ 123 00a6 6A95      		dec r22
+ 124 00a8 01F4      		brne 1b
+ 125 00aa 00C0      		rjmp .L6
+ 126               	.LVL13:
+ 127               	.L5:
+ 128               	.LM6:
+ 129 00ac 5527      		clr r21
+ 130 00ae 412F      		mov r20,r17
+ 131 00b0 302F      		mov r19,r16
+ 132 00b2 2F2D      		mov r18,r15
+ 133               	.LVL14:
+ 134               	.L6:
+ 135               	.LM7:
+ 136 00b4 82E0      		ldi r24,lo8(2)
+ 137 00b6 E816      		cp r14,r24
+ 138 00b8 F104      		cpc r15,__zero_reg__
+ 139 00ba 0105      		cpc r16,__zero_reg__
+ 140 00bc 1105      		cpc r17,__zero_reg__
+ 141 00be 00F4      		brsh .+2
+ 142 00c0 00C0      		rjmp .L7
+ 143               	.LM8:
+ 144 00c2 8091 0000 		lds r24,FirstFATSector
+ 145 00c6 9091 0000 		lds r25,(FirstFATSector)+1
+ 146 00ca A091 0000 		lds r26,(FirstFATSector)+2
+ 147 00ce B091 0000 		lds r27,(FirstFATSector)+3
+ 148 00d2 280F      		add r18,r24
+ 149 00d4 391F      		adc r19,r25
+ 150 00d6 4A1F      		adc r20,r26
+ 151 00d8 5B1F      		adc r21,r27
+ 152 00da E091 0000 		lds r30,FAT_ReadSector
+ 153 00de F091 0000 		lds r31,(FAT_ReadSector)+1
+ 154 00e2 CA01      		movw r24,r20
+ 155 00e4 B901      		movw r22,r18
+ 156 00e6 6E01      		movw r12,r28
+ 157 00e8 0894      		sec
+ 158 00ea C11C      		adc r12,__zero_reg__
+ 159 00ec D11C      		adc r13,__zero_reg__
+ 160 00ee A601      		movw r20,r12
+ 161 00f0 0995      		icall
+ 162               	.LVL15:
+ 163 00f2 8823      		tst r24
+ 164 00f4 01F4      		brne .L7
+ 165               	.LM9:
+ 166 00f6 8091 0000 		lds r24,FAT32_Enable
+ 167 00fa 8823      		tst r24
+ 168 00fc 01F0      		breq .L8
+ 169               	.LM10:
+ 170 00fe 8FE7      		ldi r24,lo8(127)
+ 171 0100 90E0      		ldi r25,hi8(127)
+ 172 0102 A0E0      		ldi r26,hlo8(127)
+ 173 0104 B0E0      		ldi r27,hhi8(127)
+ 174 0106 E822      		and r14,r24
+ 175 0108 F922      		and r15,r25
+ 176 010a 0A23      		and r16,r26
+ 177 010c 1B23      		and r17,r27
+ 178 010e C701      		movw r24,r14
+ 179 0110 880F      		lsl r24
+ 180 0112 991F      		rol r25
+ 181 0114 880F      		lsl r24
+ 182 0116 991F      		rol r25
+ 183 0118 C80E      		add r12,r24
+ 184 011a D91E      		adc r13,r25
+ 185 011c D601      		movw r26,r12
+ 186 011e 2D91      		ld r18,X+
+ 187 0120 3D91      		ld r19,X+
+ 188 0122 4D91      		ld r20,X+
+ 189 0124 5C91      		ld r21,X
+ 190               	.LVL16:
+ 191 0126 00C0      		rjmp .L9
+ 192               	.LVL17:
+ 193               	.L8:
+ 194               	.LM11:
+ 195 0128 8FEF      		ldi r24,lo8(255)
+ 196 012a 90E0      		ldi r25,hi8(255)
+ 197 012c A0E0      		ldi r26,hlo8(255)
+ 198 012e B0E0      		ldi r27,hhi8(255)
+ 199 0130 E822      		and r14,r24
+ 200 0132 F922      		and r15,r25
+ 201 0134 0A23      		and r16,r26
+ 202 0136 1B23      		and r17,r27
+ 203 0138 C701      		movw r24,r14
+ 204 013a 880F      		lsl r24
+ 205 013c 991F      		rol r25
+ 206 013e C80E      		add r12,r24
+ 207 0140 D91E      		adc r13,r25
+ 208 0142 D601      		movw r26,r12
+ 209 0144 8D91      		ld r24,X+
+ 210 0146 9C91      		ld r25,X
+ 211 0148 9C01      		movw r18,r24
+ 212               	.LVL18:
+ 213 014a 40E0      		ldi r20,lo8(0)
+ 214 014c 50E0      		ldi r21,hi8(0)
+ 215               	.LVL19:
+ 216 014e 00C0      		rjmp .L9
+ 217               	.LVL20:
+ 218               	.L7:
+ 219 0150 28EF      		ldi r18,lo8(268435448)
+ 220 0152 3FEF      		ldi r19,hi8(268435448)
+ 221 0154 4FEF      		ldi r20,hlo8(268435448)
+ 222 0156 5FE0      		ldi r21,hhi8(268435448)
+ 223               	.LVL21:
+ 224               	.L9:
+ 225               	.LM12:
+ 226 0158 B901      		movw r22,r18
+ 227               	.LVL22:
+ 228 015a CA01      		movw r24,r20
+ 229               	.LVL23:
+ 230               	/* epilogue start */
+ 231 015c C050      		subi r28,lo8(-(512))
+ 232 015e DE4F      		sbci r29,hi8(-(512))
+ 233 0160 0FB6      		in __tmp_reg__,__SREG__
+ 234 0162 F894      		cli
+ 235 0164 DEBF      		out __SP_H__,r29
+ 236 0166 0FBE      		out __SREG__,__tmp_reg__
+ 237 0168 CDBF      		out __SP_L__,r28
+ 238 016a CF91      		pop r28
+ 239 016c DF91      		pop r29
+ 240 016e 1F91      		pop r17
+ 241 0170 0F91      		pop r16
+ 242 0172 FF90      		pop r15
+ 243 0174 EF90      		pop r14
+ 244               	.LVL24:
+ 245 0176 DF90      		pop r13
+ 246 0178 CF90      		pop r12
+ 247 017a 0895      		ret
+ 248               	.LFE5:
+ 250               	.global	CopyDirentruyItem
+ 252               	CopyDirentruyItem:
+ 253               	.LFB6:
+ 254               	.LM13:
+ 255               	.LVL25:
+ 256 017c CF93      		push r28
+ 257 017e DF93      		push r29
+ 258               	/* prologue: function */
+ 259               	/* frame size = 0 */
+ 260 0180 9C01      		movw r18,r24
+ 261 0182 EB01      		movw r28,r22
+ 262               	.LM14:
+ 263 0184 40E0      		ldi r20,lo8(0)
+ 264 0186 50E0      		ldi r21,hi8(0)
+ 265               	.LVL26:
+ 266               	.L12:
+ 267               	.LM15:
+ 268 0188 F901      		movw r30,r18
+ 269 018a E40F      		add r30,r20
+ 270 018c F51F      		adc r31,r21
+ 271 018e DE01      		movw r26,r28
+ 272 0190 A40F      		add r26,r20
+ 273 0192 B51F      		adc r27,r21
+ 274 0194 8C91      		ld r24,X
+ 275 0196 8083      		st Z,r24
+ 276 0198 4F5F      		subi r20,lo8(-(1))
+ 277 019a 5F4F      		sbci r21,hi8(-(1))
+ 278 019c 4830      		cpi r20,8
+ 279 019e 5105      		cpc r21,__zero_reg__
+ 280 01a0 01F4      		brne .L12
+ 281               	.LM16:
+ 282 01a2 8885      		ldd r24,Y+8
+ 283 01a4 F901      		movw r30,r18
+ 284 01a6 8087      		std Z+8,r24
+ 285 01a8 8985      		ldd r24,Y+9
+ 286 01aa 8187      		std Z+9,r24
+ 287 01ac 8A85      		ldd r24,Y+10
+ 288 01ae 8287      		std Z+10,r24
+ 289               	.LM17:
+ 290 01b0 8B85      		ldd r24,Y+11
+ 291 01b2 8387      		std Z+11,r24
+ 292               	.LM18:
+ 293 01b4 8C85      		ldd r24,Y+12
+ 294 01b6 8487      		std Z+12,r24
+ 295               	.LM19:
+ 296 01b8 8D85      		ldd r24,Y+13
+ 297 01ba 8587      		std Z+13,r24
+ 298               	.LM20:
+ 299 01bc 8E85      		ldd r24,Y+14
+ 300 01be 8687      		std Z+14,r24
+ 301 01c0 8F85      		ldd r24,Y+15
+ 302 01c2 8787      		std Z+15,r24
+ 303               	.LM21:
+ 304 01c4 8889      		ldd r24,Y+16
+ 305 01c6 808B      		std Z+16,r24
+ 306 01c8 8989      		ldd r24,Y+17
+ 307 01ca 818B      		std Z+17,r24
+ 308               	.LM22:
+ 309 01cc 8A89      		ldd r24,Y+18
+ 310 01ce 828B      		std Z+18,r24
+ 311 01d0 8B89      		ldd r24,Y+19
+ 312 01d2 838B      		std Z+19,r24
+ 313               	.LM23:
+ 314 01d4 8C89      		ldd r24,Y+20
+ 315 01d6 9D89      		ldd r25,Y+21
+ 316 01d8 958B      		std Z+21,r25
+ 317 01da 848B      		std Z+20,r24
+ 318               	.LM24:
+ 319 01dc 8E89      		ldd r24,Y+22
+ 320 01de 868B      		std Z+22,r24
+ 321 01e0 8F89      		ldd r24,Y+23
+ 322 01e2 878B      		std Z+23,r24
+ 323               	.LM25:
+ 324 01e4 888D      		ldd r24,Y+24
+ 325 01e6 808F      		std Z+24,r24
+ 326 01e8 898D      		ldd r24,Y+25
+ 327 01ea 818F      		std Z+25,r24
+ 328               	.LM26:
+ 329 01ec 8A8D      		ldd r24,Y+26
+ 330 01ee 9B8D      		ldd r25,Y+27
+ 331 01f0 938F      		std Z+27,r25
+ 332 01f2 828F      		std Z+26,r24
+ 333               	.LM27:
+ 334 01f4 8C8D      		ldd r24,Y+28
+ 335 01f6 9D8D      		ldd r25,Y+29
+ 336 01f8 AE8D      		ldd r26,Y+30
+ 337 01fa BF8D      		ldd r27,Y+31
+ 338 01fc 848F      		std Z+28,r24
+ 339 01fe 958F      		std Z+29,r25
+ 340 0200 A68F      		std Z+30,r26
+ 341 0202 B78F      		std Z+31,r27
+ 342               	/* epilogue start */
+ 343               	.LM28:
+ 344 0204 DF91      		pop r29
+ 345 0206 CF91      		pop r28
+ 346               	.LVL27:
+ 347 0208 0895      		ret
+ 348               	.LFE6:
+ 350               	.global	GetFolderCluster
+ 352               	GetFolderCluster:
+ 353               	.LFB8:
+ 354               	.LM29:
+ 355               	.LVL28:
+ 356 020a CF92      		push r12
+ 357 020c DF92      		push r13
+ 358 020e EF92      		push r14
+ 359 0210 FF92      		push r15
+ 360 0212 0F93      		push r16
+ 361 0214 1F93      		push r17
+ 362               	/* prologue: function */
+ 363               	/* frame size = 0 */
+ 364 0216 6C01      		movw r12,r24
+ 365               	.LM30:
+ 366 0218 0E94 0000 		call __eerd_byte_m32
+ 367               	.LVL29:
+ 368 021c E82E      		mov r14,r24
+ 369               	.LVL30:
+ 370 021e FF24      		clr r15
+ 371               	.LVL31:
+ 372 0220 00E0      		ldi r16,lo8(0)
+ 373 0222 10E0      		ldi r17,hi8(0)
+ 374               	.LVL32:
+ 375               	.LM31:
+ 376 0224 102F      		mov r17,r16
+ 377 0226 0F2D      		mov r16,r15
+ 378 0228 FE2C      		mov r15,r14
+ 379 022a EE24      		clr r14
+ 380               	.LVL33:
+ 381               	.LM32:
+ 382 022c C601      		movw r24,r12
+ 383 022e 0196      		adiw r24,1
+ 384 0230 0E94 0000 		call __eerd_byte_m32
+ 385 0234 E80E      		add r14,r24
+ 386 0236 F11C      		adc r15,__zero_reg__
+ 387 0238 011D      		adc r16,__zero_reg__
+ 388 023a 111D      		adc r17,__zero_reg__
+ 389               	.LM33:
+ 390 023c 102F      		mov r17,r16
+ 391 023e 0F2D      		mov r16,r15
+ 392 0240 FE2C      		mov r15,r14
+ 393 0242 EE24      		clr r14
+ 394               	.LVL34:
+ 395               	.LM34:
+ 396 0244 C601      		movw r24,r12
+ 397 0246 0296      		adiw r24,2
+ 398 0248 0E94 0000 		call __eerd_byte_m32
+ 399 024c E80E      		add r14,r24
+ 400 024e F11C      		adc r15,__zero_reg__
+ 401 0250 011D      		adc r16,__zero_reg__
+ 402 0252 111D      		adc r17,__zero_reg__
+ 403               	.LM35:
+ 404 0254 102F      		mov r17,r16
+ 405 0256 0F2D      		mov r16,r15
+ 406 0258 FE2C      		mov r15,r14
+ 407 025a EE24      		clr r14
+ 408               	.LVL35:
+ 409               	.LM36:
+ 410 025c C601      		movw r24,r12
+ 411 025e 0396      		adiw r24,3
+ 412 0260 0E94 0000 		call __eerd_byte_m32
+ 413 0264 E80E      		add r14,r24
+ 414 0266 F11C      		adc r15,__zero_reg__
+ 415 0268 011D      		adc r16,__zero_reg__
+ 416 026a 111D      		adc r17,__zero_reg__
+ 417               	.LVL36:
+ 418               	.LM37:
+ 419 026c B701      		movw r22,r14
+ 420 026e C801      		movw r24,r16
+ 421               	.LVL37:
+ 422               	/* epilogue start */
+ 423 0270 1F91      		pop r17
+ 424 0272 0F91      		pop r16
+ 425 0274 FF90      		pop r15
+ 426               	.LVL38:
+ 427 0276 EF90      		pop r14
+ 428 0278 DF90      		pop r13
+ 429 027a CF90      		pop r12
+ 430               	.LVL39:
+ 431 027c 0895      		ret
+ 432               	.LFE8:
+ 434               	.global	Search
+ 436               	Search:
+ 437               	.LFB11:
+ 438               	.LM38:
+ 439               	.LVL40:
+ 440 027e 2F92      		push r2
+ 441 0280 3F92      		push r3
+ 442 0282 4F92      		push r4
+ 443 0284 5F92      		push r5
+ 444 0286 6F92      		push r6
+ 445 0288 7F92      		push r7
+ 446 028a 8F92      		push r8
+ 447 028c 9F92      		push r9
+ 448 028e AF92      		push r10
+ 449 0290 BF92      		push r11
+ 450 0292 CF92      		push r12
+ 451 0294 DF92      		push r13
+ 452 0296 EF92      		push r14
+ 453 0298 FF92      		push r15
+ 454 029a 0F93      		push r16
+ 455 029c 1F93      		push r17
+ 456 029e DF93      		push r29
+ 457 02a0 CF93      		push r28
+ 458 02a2 CDB7      		in r28,__SP_L__
+ 459 02a4 DEB7      		in r29,__SP_H__
+ 460 02a6 2997      		sbiw r28,9
+ 461 02a8 0FB6      		in __tmp_reg__,__SREG__
+ 462 02aa F894      		cli
+ 463 02ac DEBF      		out __SP_H__,r29
+ 464 02ae 0FBE      		out __SREG__,__tmp_reg__
+ 465 02b0 CDBF      		out __SP_L__,r28
+ 466               	/* prologue: function */
+ 467               	/* frame size = 9 */
+ 468 02b2 9D83      		std Y+5,r25
+ 469 02b4 8C83      		std Y+4,r24
+ 470 02b6 1B01      		movw r2,r22
+ 471 02b8 FA01      		movw r30,r20
+ 472               	.LM39:
+ 473 02ba E081      		ld r30,Z
+ 474 02bc E130      		cpi r30,lo8(1)
+ 475 02be 01F0      		breq .L19
+ 476               	.LVL41:
+ 477 02c0 E230      		cpi r30,lo8(2)
+ 478 02c2 01F4      		brne .L18
+ 479 02c4 00C0      		rjmp .L51
+ 480               	.L19:
+ 481 02c6 20E5      		ldi r18,lo8(80)
+ 482 02c8 2983      		std Y+1,r18
+ 483 02ca 1DE4      		ldi r17,lo8(77)
+ 484 02cc 412E      		mov r4,r17
+ 485 02ce 00C0      		rjmp .L18
+ 486               	.L51:
+ 487 02d0 3EE4      		ldi r19,lo8(78)
+ 488 02d2 3983      		std Y+1,r19
+ 489 02d4 B9E4      		ldi r27,lo8(73)
+ 490 02d6 4B2E      		mov r4,r27
+ 491               	.L18:
+ 492 02d8 6624      		clr r6
+ 493 02da 7724      		clr r7
+ 494               	.LVL42:
+ 495 02dc 1B82      		std Y+3,__zero_reg__
+ 496 02de 1A82      		std Y+2,__zero_reg__
+ 497               	.LVL43:
+ 498               	.L46:
+ 499               	.LM40:
+ 500 02e0 8A81      		ldd r24,Y+2
+ 501 02e2 9B81      		ldd r25,Y+3
+ 502 02e4 0E94 0000 		call GetFolderCluster
+ 503               	.LVL44:
+ 504               	.LM41:
+ 505 02e8 EA81      		ldd r30,Y+2
+ 506 02ea FB81      		ldd r31,Y+3
+ 507 02ec 3496      		adiw r30,4
+ 508 02ee FB83      		std Y+3,r31
+ 509 02f0 EA83      		std Y+2,r30
+ 510               	.LVL45:
+ 511               	.LM42:
+ 512 02f2 6F3F      		cpi r22,lo8(-1)
+ 513 02f4 FFEF      		ldi r31,hi8(-1)
+ 514 02f6 7F07      		cpc r23,r31
+ 515 02f8 FFEF      		ldi r31,hlo8(-1)
+ 516 02fa 8F07      		cpc r24,r31
+ 517 02fc FFEF      		ldi r31,hhi8(-1)
+ 518 02fe 9F07      		cpc r25,r31
+ 519               	.LVL46:
+ 520 0300 01F4      		brne .+2
+ 521 0302 00C0      		rjmp .L21
+ 522               	.LM43:
+ 523 0304 6115      		cp r22,__zero_reg__
+ 524 0306 7105      		cpc r23,__zero_reg__
+ 525 0308 8105      		cpc r24,__zero_reg__
+ 526 030a 9105      		cpc r25,__zero_reg__
+ 527 030c 01F0      		breq .+2
+ 528 030e 00C0      		rjmp .L22
+ 529 0310 8091 0000 		lds r24,FAT32_Enable
+ 530 0314 8823      		tst r24
+ 531 0316 01F0      		breq .L23
+ 532 0318 CC24      		clr r12
+ 533 031a DD24      		clr r13
+ 534 031c 7601      		movw r14,r12
+ 535 031e 00C0      		rjmp .L47
+ 536               	.L23:
+ 537               	.LM44:
+ 538 0320 80E0      		ldi r24,lo8(512)
+ 539 0322 92E0      		ldi r25,hi8(512)
+ 540 0324 0E94 0000 		call malloc
+ 541               	.LVL47:
+ 542 0328 8C01      		movw r16,r24
+ 543               	.LM45:
+ 544 032a 0097      		sbiw r24,0
+ 545 032c 01F4      		brne .+2
+ 546 032e 00C0      		rjmp .L25
+ 547 0330 FF24      		clr r15
+ 548               	.LVL48:
+ 549               	.LM46:
+ 550 0332 C12C      		mov r12,__zero_reg__
+ 551 0334 A2E0      		ldi r26,hi8(512)
+ 552 0336 DA2E      		mov r13,r26
+ 553               	.LVL49:
+ 554 0338 C80E      		add r12,r24
+ 555 033a D91E      		adc r13,r25
+ 556 033c 00C0      		rjmp .L26
+ 557               	.L31:
+ 558               	.LM47:
+ 559 033e 8091 0000 		lds r24,FirstDirSector
+ 560 0342 9091 0000 		lds r25,(FirstDirSector)+1
+ 561 0346 A091 0000 		lds r26,(FirstDirSector)+2
+ 562 034a B091 0000 		lds r27,(FirstDirSector)+3
+ 563 034e 280F      		add r18,r24
+ 564 0350 391F      		adc r19,r25
+ 565 0352 4A1F      		adc r20,r26
+ 566 0354 5B1F      		adc r21,r27
+ 567 0356 E091 0000 		lds r30,FAT_ReadSector
+ 568 035a F091 0000 		lds r31,(FAT_ReadSector)+1
+ 569 035e CA01      		movw r24,r20
+ 570 0360 B901      		movw r22,r18
+ 571 0362 A801      		movw r20,r16
+ 572 0364 0995      		icall
+ 573 0366 8823      		tst r24
+ 574 0368 01F0      		breq .+2
+ 575 036a 00C0      		rjmp .L50
+ 576               	.L27:
+ 577 036c 5801      		movw r10,r16
+ 578               	.L30:
+ 579               	.LM48:
+ 580 036e F501      		movw r30,r10
+ 581 0370 8081      		ld r24,Z
+ 582 0372 8E32      		cpi r24,lo8(46)
+ 583 0374 01F0      		breq .L29
+ 584 0376 8823      		tst r24
+ 585 0378 01F0      		breq .L29
+ 586 037a 853E      		cpi r24,lo8(-27)
+ 587 037c 01F0      		breq .L29
+ 588 037e 8385      		ldd r24,Z+11
+ 589 0380 8F30      		cpi r24,lo8(15)
+ 590 0382 01F0      		breq .L29
+ 591               	.LM49:
+ 592 0384 8085      		ldd r24,Z+8
+ 593 0386 8234      		cpi r24,lo8(66)
+ 594 0388 01F4      		brne .L29
+ 595 038a 8185      		ldd r24,Z+9
+ 596 038c 8415      		cp r24,r4
+ 597 038e 01F4      		brne .L29
+ 598 0390 8285      		ldd r24,Z+10
+ 599 0392 F981      		ldd r31,Y+1
+ 600 0394 8F17      		cp r24,r31
+ 601 0396 01F4      		brne .L29
+ 602               	.LM50:
+ 603 0398 8C81      		ldd r24,Y+4
+ 604 039a 9D81      		ldd r25,Y+5
+ 605 039c B501      		movw r22,r10
+ 606 039e 0E94 0000 		call CopyDirentruyItem
+ 607               	.LM51:
+ 608 03a2 0894      		sec
+ 609 03a4 611C      		adc r6,__zero_reg__
+ 610 03a6 711C      		adc r7,__zero_reg__
+ 611               	.LM52:
+ 612 03a8 F101      		movw r30,r2
+ 613 03aa 8081      		ld r24,Z
+ 614 03ac 9181      		ldd r25,Z+1
+ 615 03ae 6816      		cp r6,r24
+ 616 03b0 7906      		cpc r7,r25
+ 617 03b2 01F4      		brne .+2
+ 618 03b4 00C0      		rjmp .L49
+ 619               	.L29:
+ 620 03b6 20E2      		ldi r18,lo8(32)
+ 621 03b8 30E0      		ldi r19,hi8(32)
+ 622 03ba A20E      		add r10,r18
+ 623 03bc B31E      		adc r11,r19
+ 624               	.LM53:
+ 625 03be AC14      		cp r10,r12
+ 626 03c0 BD04      		cpc r11,r13
+ 627 03c2 01F4      		brne .L30
+ 628               	.LM54:
+ 629 03c4 F394      		inc r15
+ 630               	.L26:
+ 631 03c6 2F2D      		mov r18,r15
+ 632 03c8 30E0      		ldi r19,lo8(0)
+ 633 03ca 40E0      		ldi r20,lo8(0)
+ 634 03cc 50E0      		ldi r21,hi8(0)
+ 635 03ce 8091 0000 		lds r24,RootDirSectors
+ 636 03d2 9091 0000 		lds r25,(RootDirSectors)+1
+ 637 03d6 A091 0000 		lds r26,(RootDirSectors)+2
+ 638 03da B091 0000 		lds r27,(RootDirSectors)+3
+ 639 03de 2817      		cp r18,r24
+ 640 03e0 3907      		cpc r19,r25
+ 641 03e2 4A07      		cpc r20,r26
+ 642 03e4 5B07      		cpc r21,r27
+ 643 03e6 00F4      		brsh .+2
+ 644 03e8 00C0      		rjmp .L31
+ 645               	.LM55:
+ 646 03ea C801      		movw r24,r16
+ 647 03ec 0E94 0000 		call free
+ 648 03f0 00C0      		rjmp .L46
+ 649               	.LVL50:
+ 650               	.L22:
+ 651               	.LM56:
+ 652 03f2 6B01      		movw r12,r22
+ 653 03f4 7C01      		movw r14,r24
+ 654               	.L47:
+ 655               	.LM57:
+ 656 03f6 C701      		movw r24,r14
+ 657 03f8 B601      		movw r22,r12
+ 658               	.LVL51:
+ 659 03fa 6250      		subi r22,lo8(-(-2))
+ 660 03fc 7040      		sbci r23,hi8(-(-2))
+ 661 03fe 8040      		sbci r24,hlo8(-(-2))
+ 662 0400 9040      		sbci r25,hhi8(-(-2))
+ 663 0402 2091 0000 		lds r18,SectorsPerClust
+ 664 0406 3091 0000 		lds r19,(SectorsPerClust)+1
+ 665 040a 40E0      		ldi r20,lo8(0)
+ 666 040c 50E0      		ldi r21,hi8(0)
+ 667 040e 0E94 0000 		call __mulsi3
+ 668 0412 4B01      		movw r8,r22
+ 669 0414 5C01      		movw r10,r24
+ 670 0416 8091 0000 		lds r24,FirstDataSector
+ 671 041a 9091 0000 		lds r25,(FirstDataSector)+1
+ 672 041e A091 0000 		lds r26,(FirstDataSector)+2
+ 673 0422 B091 0000 		lds r27,(FirstDataSector)+3
+ 674 0426 880E      		add r8,r24
+ 675 0428 991E      		adc r9,r25
+ 676 042a AA1E      		adc r10,r26
+ 677 042c BB1E      		adc r11,r27
+ 678               	.LM58:
+ 679 042e 80E0      		ldi r24,lo8(512)
+ 680 0430 92E0      		ldi r25,hi8(512)
+ 681 0432 0E94 0000 		call malloc
+ 682 0436 8C01      		movw r16,r24
+ 683               	.LM59:
+ 684 0438 0097      		sbiw r24,0
+ 685 043a 01F4      		brne .+2
+ 686 043c 00C0      		rjmp .L25
+ 687 043e 5524      		clr r5
+ 688               	.LM60:
+ 689 0440 8050      		subi r24,lo8(-(512))
+ 690 0442 9E4F      		sbci r25,hi8(-(512))
+ 691 0444 9F83      		std Y+7,r25
+ 692 0446 8E83      		std Y+6,r24
+ 693 0448 00C0      		rjmp .L33
+ 694               	.LVL52:
+ 695               	.L37:
+ 696               	.LM61:
+ 697 044a C501      		movw r24,r10
+ 698 044c B401      		movw r22,r8
+ 699 044e 650D      		add r22,r5
+ 700 0450 711D      		adc r23,__zero_reg__
+ 701 0452 811D      		adc r24,__zero_reg__
+ 702 0454 911D      		adc r25,__zero_reg__
+ 703 0456 E091 0000 		lds r30,FAT_ReadSector
+ 704 045a F091 0000 		lds r31,(FAT_ReadSector)+1
+ 705 045e A801      		movw r20,r16
+ 706 0460 0995      		icall
+ 707               	.LVL53:
+ 708 0462 8823      		tst r24
+ 709 0464 01F0      		breq .L34
+ 710               	.LVL54:
+ 711               	.L50:
+ 712 0466 C801      		movw r24,r16
+ 713 0468 0E94 0000 		call free
+ 714 046c 00C0      		rjmp .L25
+ 715               	.LVL55:
+ 716               	.L34:
+ 717 046e 1987      		std Y+9,r17
+ 718 0470 0887      		std Y+8,r16
+ 719               	.L36:
+ 720               	.LM62:
+ 721 0472 E885      		ldd r30,Y+8
+ 722 0474 F985      		ldd r31,Y+9
+ 723 0476 8081      		ld r24,Z
+ 724 0478 8E32      		cpi r24,lo8(46)
+ 725 047a 01F0      		breq .L35
+ 726 047c 8823      		tst r24
+ 727 047e 01F0      		breq .L35
+ 728 0480 853E      		cpi r24,lo8(-27)
+ 729 0482 01F0      		breq .L35
+ 730 0484 8385      		ldd r24,Z+11
+ 731 0486 8F30      		cpi r24,lo8(15)
+ 732 0488 01F0      		breq .L35
+ 733               	.LM63:
+ 734 048a 8085      		ldd r24,Z+8
+ 735 048c 8234      		cpi r24,lo8(66)
+ 736 048e 01F4      		brne .L35
+ 737 0490 8185      		ldd r24,Z+9
+ 738 0492 8415      		cp r24,r4
+ 739 0494 01F4      		brne .L35
+ 740 0496 8285      		ldd r24,Z+10
+ 741 0498 F981      		ldd r31,Y+1
+ 742 049a 8F17      		cp r24,r31
+ 743 049c 01F4      		brne .L35
+ 744               	.LM64:
+ 745 049e 8C81      		ldd r24,Y+4
+ 746 04a0 9D81      		ldd r25,Y+5
+ 747 04a2 6885      		ldd r22,Y+8
+ 748 04a4 7985      		ldd r23,Y+9
+ 749 04a6 0E94 0000 		call CopyDirentruyItem
+ 750               	.LM65:
+ 751 04aa 0894      		sec
+ 752 04ac 611C      		adc r6,__zero_reg__
+ 753 04ae 711C      		adc r7,__zero_reg__
+ 754               	.LM66:
+ 755 04b0 F101      		movw r30,r2
+ 756 04b2 8081      		ld r24,Z
+ 757 04b4 9181      		ldd r25,Z+1
+ 758 04b6 6816      		cp r6,r24
+ 759 04b8 7906      		cpc r7,r25
+ 760 04ba 01F4      		brne .L35
+ 761               	.LVL56:
+ 762               	.L49:
+ 763 04bc C801      		movw r24,r16
+ 764 04be 0E94 0000 		call free
+ 765 04c2 00C0      		rjmp .L48
+ 766               	.LVL57:
+ 767               	.L35:
+ 768 04c4 2885      		ldd r18,Y+8
+ 769 04c6 3985      		ldd r19,Y+9
+ 770 04c8 205E      		subi r18,lo8(-(32))
+ 771 04ca 3F4F      		sbci r19,hi8(-(32))
+ 772 04cc 3987      		std Y+9,r19
+ 773 04ce 2887      		std Y+8,r18
+ 774               	.LM67:
+ 775 04d0 8E81      		ldd r24,Y+6
+ 776 04d2 9F81      		ldd r25,Y+7
+ 777 04d4 2817      		cp r18,r24
+ 778 04d6 3907      		cpc r19,r25
+ 779 04d8 01F4      		brne .L36
+ 780               	.LM68:
+ 781 04da 5394      		inc r5
+ 782               	.L33:
+ 783 04dc 252D      		mov r18,r5
+ 784 04de 30E0      		ldi r19,lo8(0)
+ 785               	.LVL58:
+ 786 04e0 8091 0000 		lds r24,SectorsPerClust
+ 787 04e4 9091 0000 		lds r25,(SectorsPerClust)+1
+ 788 04e8 2817      		cp r18,r24
+ 789 04ea 3907      		cpc r19,r25
+ 790 04ec 00F4      		brsh .+2
+ 791 04ee 00C0      		rjmp .L37
+ 792               	.LVL59:
+ 793               	.LM69:
+ 794 04f0 C801      		movw r24,r16
+ 795 04f2 0E94 0000 		call free
+ 796               	.LVL60:
+ 797               	.LM70:
+ 798 04f6 C701      		movw r24,r14
+ 799 04f8 B601      		movw r22,r12
+ 800 04fa 0E94 0000 		call FAT_NextCluster
+ 801 04fe 6B01      		movw r12,r22
+ 802 0500 7C01      		movw r14,r24
+ 803               	.LM71:
+ 804 0502 9FEF      		ldi r25,lo8(268435455)
+ 805 0504 C916      		cp r12,r25
+ 806 0506 9FEF      		ldi r25,hi8(268435455)
+ 807 0508 D906      		cpc r13,r25
+ 808 050a 9FEF      		ldi r25,hlo8(268435455)
+ 809 050c E906      		cpc r14,r25
+ 810 050e 9FE0      		ldi r25,hhi8(268435455)
+ 811 0510 F906      		cpc r15,r25
+ 812 0512 01F4      		brne .+2
+ 813 0514 00C0      		rjmp .L46
+ 814 0516 E8EF      		ldi r30,lo8(268435448)
+ 815 0518 CE16      		cp r12,r30
+ 816 051a EFEF      		ldi r30,hi8(268435448)
+ 817 051c DE06      		cpc r13,r30
+ 818 051e EFEF      		ldi r30,hlo8(268435448)
+ 819 0520 EE06      		cpc r14,r30
+ 820 0522 EFE0      		ldi r30,hhi8(268435448)
+ 821 0524 FE06      		cpc r15,r30
+ 822 0526 01F4      		brne .+2
+ 823 0528 00C0      		rjmp .L46
+ 824 052a 8091 0000 		lds r24,FAT32_Enable
+ 825 052e 8823      		tst r24
+ 826 0530 01F0      		breq .+2
+ 827 0532 00C0      		rjmp .L47
+ 828 0534 FFEF      		ldi r31,lo8(65535)
+ 829 0536 CF16      		cp r12,r31
+ 830 0538 FFEF      		ldi r31,hi8(65535)
+ 831 053a DF06      		cpc r13,r31
+ 832 053c F0E0      		ldi r31,hlo8(65535)
+ 833 053e EF06      		cpc r14,r31
+ 834 0540 F0E0      		ldi r31,hhi8(65535)
+ 835 0542 FF06      		cpc r15,r31
+ 836 0544 01F0      		breq .+2
+ 837 0546 00C0      		rjmp .L47
+ 838 0548 00C0      		rjmp .L46
+ 839               	.LVL61:
+ 840               	.L21:
+ 841               	.LM72:
+ 842 054a F101      		movw r30,r2
+ 843 054c 8081      		ld r24,Z
+ 844 054e 9181      		ldd r25,Z+1
+ 845 0550 892B      		or r24,r25
+ 846 0552 01F4      		brne .L48
+ 847               	.L38:
+ 848 0554 F101      		movw r30,r2
+ 849 0556 7182      		std Z+1,r7
+ 850 0558 6082      		st Z,r6
+ 851               	.L48:
+ 852 055a 80E0      		ldi r24,lo8(0)
+ 853 055c 00C0      		rjmp .L28
+ 854               	.LVL62:
+ 855               	.L25:
+ 856 055e 81E0      		ldi r24,lo8(1)
+ 857               	.LVL63:
+ 858               	.L28:
+ 859               	/* epilogue start */
+ 860               	.LM73:
+ 861 0560 2996      		adiw r28,9
+ 862 0562 0FB6      		in __tmp_reg__,__SREG__
+ 863 0564 F894      		cli
+ 864 0566 DEBF      		out __SP_H__,r29
+ 865 0568 0FBE      		out __SREG__,__tmp_reg__
+ 866 056a CDBF      		out __SP_L__,r28
+ 867 056c CF91      		pop r28
+ 868 056e DF91      		pop r29
+ 869 0570 1F91      		pop r17
+ 870 0572 0F91      		pop r16
+ 871 0574 FF90      		pop r15
+ 872 0576 EF90      		pop r14
+ 873 0578 DF90      		pop r13
+ 874 057a CF90      		pop r12
+ 875               	.LVL64:
+ 876 057c BF90      		pop r11
+ 877 057e AF90      		pop r10
+ 878 0580 9F90      		pop r9
+ 879 0582 8F90      		pop r8
+ 880               	.LVL65:
+ 881 0584 7F90      		pop r7
+ 882 0586 6F90      		pop r6
+ 883               	.LVL66:
+ 884 0588 5F90      		pop r5
+ 885               	.LVL67:
+ 886 058a 4F90      		pop r4
+ 887 058c 3F90      		pop r3
+ 888 058e 2F90      		pop r2
+ 889               	.LVL68:
+ 890 0590 0895      		ret
+ 891               	.LFE11:
+ 893               	.global	WriteFolderCluster
+ 895               	WriteFolderCluster:
+ 896               	.LFB7:
+ 897               	.LM74:
+ 898               	.LVL69:
+ 899 0592 CF92      		push r12
+ 900 0594 DF92      		push r13
+ 901 0596 EF92      		push r14
+ 902 0598 FF92      		push r15
+ 903 059a 0F93      		push r16
+ 904 059c 1F93      		push r17
+ 905               	/* prologue: function */
+ 906               	/* frame size = 0 */
+ 907 059e 6C01      		movw r12,r24
+ 908 05a0 7A01      		movw r14,r20
+ 909 05a2 8B01      		movw r16,r22
+ 910               	.LM75:
+ 911 05a4 272F      		mov r18,r23
+ 912 05a6 3327      		clr r19
+ 913 05a8 4427      		clr r20
+ 914 05aa 5527      		clr r21
+ 915 05ac 622F      		mov r22,r18
+ 916 05ae 0E94 0000 		call __eewr_byte_m32
+ 917               	.LVL70:
+ 918               	.LM76:
+ 919 05b2 9801      		movw r18,r16
+ 920 05b4 4427      		clr r20
+ 921 05b6 5527      		clr r21
+ 922 05b8 C601      		movw r24,r12
+ 923 05ba 0196      		adiw r24,1
+ 924 05bc 622F      		mov r22,r18
+ 925 05be 0E94 0000 		call __eewr_byte_m32
+ 926               	.LM77:
+ 927 05c2 5527      		clr r21
+ 928 05c4 412F      		mov r20,r17
+ 929 05c6 302F      		mov r19,r16
+ 930 05c8 2F2D      		mov r18,r15
+ 931 05ca C601      		movw r24,r12
+ 932 05cc 0296      		adiw r24,2
+ 933 05ce 622F      		mov r22,r18
+ 934 05d0 0E94 0000 		call __eewr_byte_m32
+ 935               	.LM78:
+ 936 05d4 C601      		movw r24,r12
+ 937 05d6 0396      		adiw r24,3
+ 938 05d8 6E2D      		mov r22,r14
+ 939 05da 0E94 0000 		call __eewr_byte_m32
+ 940               	/* epilogue start */
+ 941               	.LM79:
+ 942 05de 1F91      		pop r17
+ 943 05e0 0F91      		pop r16
+ 944 05e2 FF90      		pop r15
+ 945 05e4 EF90      		pop r14
+ 946               	.LVL71:
+ 947 05e6 DF90      		pop r13
+ 948 05e8 CF90      		pop r12
+ 949               	.LVL72:
+ 950 05ea 0895      		ret
+ 951               	.LFE7:
+ 953               	.global	SearchFolder
+ 955               	SearchFolder:
+ 956               	.LFB9:
+ 957               	.LM80:
+ 958               	.LVL73:
+ 959 05ec 2F92      		push r2
+ 960 05ee 3F92      		push r3
+ 961 05f0 4F92      		push r4
+ 962 05f2 5F92      		push r5
+ 963 05f4 7F92      		push r7
+ 964 05f6 8F92      		push r8
+ 965 05f8 9F92      		push r9
+ 966 05fa AF92      		push r10
+ 967 05fc BF92      		push r11
+ 968 05fe CF92      		push r12
+ 969 0600 DF92      		push r13
+ 970 0602 EF92      		push r14
+ 971 0604 FF92      		push r15
+ 972 0606 0F93      		push r16
+ 973 0608 1F93      		push r17
+ 974 060a CF93      		push r28
+ 975 060c DF93      		push r29
+ 976               	/* prologue: function */
+ 977               	/* frame size = 0 */
+ 978 060e 2A01      		movw r4,r20
+ 979               	.LM81:
+ 980 0610 6115      		cp r22,__zero_reg__
+ 981 0612 7105      		cpc r23,__zero_reg__
+ 982 0614 8105      		cpc r24,__zero_reg__
+ 983 0616 9105      		cpc r25,__zero_reg__
+ 984 0618 01F0      		breq .+2
+ 985 061a 00C0      		rjmp .L55
+ 986               	.LVL74:
+ 987 061c 8091 0000 		lds r24,FAT32_Enable
+ 988 0620 8823      		tst r24
+ 989 0622 01F0      		breq .L56
+ 990 0624 CC24      		clr r12
+ 991 0626 DD24      		clr r13
+ 992 0628 7601      		movw r14,r12
+ 993               	.LVL75:
+ 994 062a 00C0      		rjmp .L76
+ 995               	.LVL76:
+ 996               	.L56:
+ 997               	.LM82:
+ 998 062c 80E0      		ldi r24,lo8(512)
+ 999 062e 92E0      		ldi r25,hi8(512)
+ 1000 0630 0E94 0000 		call malloc
+ 1001               	.LVL77:
+ 1002 0634 8C01      		movw r16,r24
+ 1003               	.LM83:
+ 1004 0636 0097      		sbiw r24,0
+ 1005 0638 01F4      		brne .+2
+ 1006 063a 00C0      		rjmp .L58
+ 1007 063c FF24      		clr r15
+ 1008               	.LVL78:
+ 1009               	.LM84:
+ 1010 063e C12C      		mov r12,__zero_reg__
+ 1011 0640 B2E0      		ldi r27,hi8(512)
+ 1012 0642 DB2E      		mov r13,r27
+ 1013 0644 C80E      		add r12,r24
+ 1014 0646 D91E      		adc r13,r25
+ 1015 0648 00C0      		rjmp .L59
+ 1016               	.L65:
+ 1017               	.LM85:
+ 1018 064a 8091 0000 		lds r24,FirstDirSector
+ 1019 064e 9091 0000 		lds r25,(FirstDirSector)+1
+ 1020 0652 A091 0000 		lds r26,(FirstDirSector)+2
+ 1021 0656 B091 0000 		lds r27,(FirstDirSector)+3
+ 1022 065a 280F      		add r18,r24
+ 1023 065c 391F      		adc r19,r25
+ 1024 065e 4A1F      		adc r20,r26
+ 1025 0660 5B1F      		adc r21,r27
+ 1026 0662 E091 0000 		lds r30,FAT_ReadSector
+ 1027 0666 F091 0000 		lds r31,(FAT_ReadSector)+1
+ 1028 066a CA01      		movw r24,r20
+ 1029 066c B901      		movw r22,r18
+ 1030 066e A801      		movw r20,r16
+ 1031 0670 0995      		icall
+ 1032 0672 8823      		tst r24
+ 1033 0674 01F0      		breq .+2
+ 1034 0676 00C0      		rjmp .L77
+ 1035               	.L60:
+ 1036 0678 E801      		movw r28,r16
+ 1037               	.L64:
+ 1038               	.LM86:
+ 1039 067a 8881      		ld r24,Y
+ 1040 067c 8E32      		cpi r24,lo8(46)
+ 1041 067e 01F0      		breq .L62
+ 1042 0680 8823      		tst r24
+ 1043 0682 01F0      		breq .L62
+ 1044 0684 853E      		cpi r24,lo8(-27)
+ 1045 0686 01F0      		breq .L62
+ 1046               	.LM87:
+ 1047 0688 8B85      		ldd r24,Y+11
+ 1048 068a 84FF      		sbrs r24,4
+ 1049 068c 00C0      		rjmp .L62
+ 1050               	.LM88:
+ 1051 068e F201      		movw r30,r4
+ 1052 0690 2081      		ld r18,Z
+ 1053 0692 3181      		ldd r19,Z+1
+ 1054 0694 F2E0      		ldi r31,hi8(512)
+ 1055 0696 2030      		cpi r18,lo8(512)
+ 1056 0698 3F07      		cpc r19,r31
+ 1057 069a 01F4      		brne .+2
+ 1058 069c 00C0      		rjmp .L63
+ 1059               	.LM89:
+ 1060 069e 4C89      		ldd r20,Y+20
+ 1061 06a0 5D89      		ldd r21,Y+21
+ 1062 06a2 60E0      		ldi r22,lo8(0)
+ 1063 06a4 70E0      		ldi r23,hi8(0)
+ 1064 06a6 BA01      		movw r22,r20
+ 1065 06a8 5527      		clr r21
+ 1066 06aa 4427      		clr r20
+ 1067 06ac 8A8D      		ldd r24,Y+26
+ 1068 06ae 9B8D      		ldd r25,Y+27
+ 1069 06b0 A0E0      		ldi r26,lo8(0)
+ 1070 06b2 B0E0      		ldi r27,hi8(0)
+ 1071 06b4 480F      		add r20,r24
+ 1072 06b6 591F      		adc r21,r25
+ 1073 06b8 6A1F      		adc r22,r26
+ 1074 06ba 7B1F      		adc r23,r27
+ 1075 06bc C901      		movw r24,r18
+ 1076 06be 0E94 0000 		call WriteFolderCluster
+ 1077               	.LM90:
+ 1078 06c2 F201      		movw r30,r4
+ 1079 06c4 8081      		ld r24,Z
+ 1080 06c6 9181      		ldd r25,Z+1
+ 1081 06c8 0496      		adiw r24,4
+ 1082 06ca 9183      		std Z+1,r25
+ 1083 06cc 8083      		st Z,r24
+ 1084               	.L62:
+ 1085 06ce A096      		adiw r28,32
+ 1086               	.LM91:
+ 1087 06d0 CC15      		cp r28,r12
+ 1088 06d2 DD05      		cpc r29,r13
+ 1089 06d4 01F4      		brne .L64
+ 1090               	.LM92:
+ 1091 06d6 F394      		inc r15
+ 1092               	.L59:
+ 1093 06d8 2F2D      		mov r18,r15
+ 1094 06da 30E0      		ldi r19,lo8(0)
+ 1095 06dc 40E0      		ldi r20,lo8(0)
+ 1096 06de 50E0      		ldi r21,hi8(0)
+ 1097 06e0 8091 0000 		lds r24,RootDirSectors
+ 1098 06e4 9091 0000 		lds r25,(RootDirSectors)+1
+ 1099 06e8 A091 0000 		lds r26,(RootDirSectors)+2
+ 1100 06ec B091 0000 		lds r27,(RootDirSectors)+3
+ 1101 06f0 2817      		cp r18,r24
+ 1102 06f2 3907      		cpc r19,r25
+ 1103 06f4 4A07      		cpc r20,r26
+ 1104 06f6 5B07      		cpc r21,r27
+ 1105 06f8 00F4      		brsh .+2
+ 1106 06fa 00C0      		rjmp .L65
+ 1107               	.LM93:
+ 1108 06fc C801      		movw r24,r16
+ 1109 06fe 0E94 0000 		call free
+ 1110 0702 00C0      		rjmp .L63
+ 1111               	.LVL79:
+ 1112               	.L55:
+ 1113               	.LM94:
+ 1114 0704 6B01      		movw r12,r22
+ 1115 0706 7C01      		movw r14,r24
+ 1116               	.LVL80:
+ 1117               	.L76:
+ 1118               	.LM95:
+ 1119 0708 C701      		movw r24,r14
+ 1120 070a B601      		movw r22,r12
+ 1121               	.LVL81:
+ 1122 070c 6250      		subi r22,lo8(-(-2))
+ 1123 070e 7040      		sbci r23,hi8(-(-2))
+ 1124 0710 8040      		sbci r24,hlo8(-(-2))
+ 1125 0712 9040      		sbci r25,hhi8(-(-2))
+ 1126 0714 2091 0000 		lds r18,SectorsPerClust
+ 1127 0718 3091 0000 		lds r19,(SectorsPerClust)+1
+ 1128 071c 40E0      		ldi r20,lo8(0)
+ 1129 071e 50E0      		ldi r21,hi8(0)
+ 1130 0720 0E94 0000 		call __mulsi3
+ 1131 0724 4B01      		movw r8,r22
+ 1132 0726 5C01      		movw r10,r24
+ 1133 0728 8091 0000 		lds r24,FirstDataSector
+ 1134 072c 9091 0000 		lds r25,(FirstDataSector)+1
+ 1135 0730 A091 0000 		lds r26,(FirstDataSector)+2
+ 1136 0734 B091 0000 		lds r27,(FirstDataSector)+3
+ 1137 0738 880E      		add r8,r24
+ 1138 073a 991E      		adc r9,r25
+ 1139 073c AA1E      		adc r10,r26
+ 1140 073e BB1E      		adc r11,r27
+ 1141               	.LM96:
+ 1142 0740 80E0      		ldi r24,lo8(512)
+ 1143 0742 92E0      		ldi r25,hi8(512)
+ 1144 0744 0E94 0000 		call malloc
+ 1145 0748 8C01      		movw r16,r24
+ 1146               	.LM97:
+ 1147 074a 0097      		sbiw r24,0
+ 1148 074c 01F4      		brne .+2
+ 1149 074e 00C0      		rjmp .L58
+ 1150 0750 7724      		clr r7
+ 1151               	.LM98:
+ 1152 0752 212C      		mov r2,__zero_reg__
+ 1153 0754 F2E0      		ldi r31,hi8(512)
+ 1154 0756 3F2E      		mov r3,r31
+ 1155 0758 280E      		add r2,r24
+ 1156 075a 391E      		adc r3,r25
+ 1157 075c 00C0      		rjmp .L66
+ 1158               	.LVL82:
+ 1159               	.L70:
+ 1160               	.LM99:
+ 1161 075e C501      		movw r24,r10
+ 1162 0760 B401      		movw r22,r8
+ 1163 0762 670D      		add r22,r7
+ 1164 0764 711D      		adc r23,__zero_reg__
+ 1165 0766 811D      		adc r24,__zero_reg__
+ 1166 0768 911D      		adc r25,__zero_reg__
+ 1167 076a E091 0000 		lds r30,FAT_ReadSector
+ 1168 076e F091 0000 		lds r31,(FAT_ReadSector)+1
+ 1169 0772 A801      		movw r20,r16
+ 1170 0774 0995      		icall
+ 1171               	.LVL83:
+ 1172 0776 8823      		tst r24
+ 1173 0778 01F0      		breq .L67
+ 1174               	.LVL84:
+ 1175               	.L77:
+ 1176 077a C801      		movw r24,r16
+ 1177 077c 0E94 0000 		call free
+ 1178 0780 00C0      		rjmp .L58
+ 1179               	.LVL85:
+ 1180               	.L67:
+ 1181 0782 E801      		movw r28,r16
+ 1182               	.L69:
+ 1183               	.LM100:
+ 1184 0784 8881      		ld r24,Y
+ 1185 0786 8E32      		cpi r24,lo8(46)
+ 1186 0788 01F0      		breq .L68
+ 1187 078a 8823      		tst r24
+ 1188 078c 01F0      		breq .L68
+ 1189 078e 853E      		cpi r24,lo8(-27)
+ 1190 0790 01F0      		breq .L68
+ 1191               	.LM101:
+ 1192 0792 8B85      		ldd r24,Y+11
+ 1193 0794 84FF      		sbrs r24,4
+ 1194 0796 00C0      		rjmp .L68
+ 1195               	.LM102:
+ 1196 0798 F201      		movw r30,r4
+ 1197 079a 2081      		ld r18,Z
+ 1198 079c 3181      		ldd r19,Z+1
+ 1199 079e F2E0      		ldi r31,hi8(512)
+ 1200 07a0 2030      		cpi r18,lo8(512)
+ 1201 07a2 3F07      		cpc r19,r31
+ 1202 07a4 01F4      		brne .+2
+ 1203 07a6 00C0      		rjmp .L63
+ 1204               	.LM103:
+ 1205 07a8 4C89      		ldd r20,Y+20
+ 1206 07aa 5D89      		ldd r21,Y+21
+ 1207 07ac 60E0      		ldi r22,lo8(0)
+ 1208 07ae 70E0      		ldi r23,hi8(0)
+ 1209 07b0 BA01      		movw r22,r20
+ 1210 07b2 5527      		clr r21
+ 1211 07b4 4427      		clr r20
+ 1212 07b6 8A8D      		ldd r24,Y+26
+ 1213 07b8 9B8D      		ldd r25,Y+27
+ 1214 07ba A0E0      		ldi r26,lo8(0)
+ 1215 07bc B0E0      		ldi r27,hi8(0)
+ 1216 07be 480F      		add r20,r24
+ 1217 07c0 591F      		adc r21,r25
+ 1218 07c2 6A1F      		adc r22,r26
+ 1219 07c4 7B1F      		adc r23,r27
+ 1220 07c6 C901      		movw r24,r18
+ 1221 07c8 0E94 0000 		call WriteFolderCluster
+ 1222               	.LM104:
+ 1223 07cc F201      		movw r30,r4
+ 1224 07ce 8081      		ld r24,Z
+ 1225 07d0 9181      		ldd r25,Z+1
+ 1226 07d2 0496      		adiw r24,4
+ 1227 07d4 9183      		std Z+1,r25
+ 1228 07d6 8083      		st Z,r24
+ 1229               	.L68:
+ 1230 07d8 A096      		adiw r28,32
+ 1231               	.LM105:
+ 1232 07da C215      		cp r28,r2
+ 1233 07dc D305      		cpc r29,r3
+ 1234 07de 01F4      		brne .L69
+ 1235               	.LM106:
+ 1236 07e0 7394      		inc r7
+ 1237               	.L66:
+ 1238 07e2 272D      		mov r18,r7
+ 1239 07e4 30E0      		ldi r19,lo8(0)
+ 1240               	.LVL86:
+ 1241 07e6 8091 0000 		lds r24,SectorsPerClust
+ 1242 07ea 9091 0000 		lds r25,(SectorsPerClust)+1
+ 1243 07ee 2817      		cp r18,r24
+ 1244 07f0 3907      		cpc r19,r25
+ 1245 07f2 00F4      		brsh .+2
+ 1246 07f4 00C0      		rjmp .L70
+ 1247               	.LVL87:
+ 1248               	.LM107:
+ 1249 07f6 C801      		movw r24,r16
+ 1250 07f8 0E94 0000 		call free
+ 1251               	.LVL88:
+ 1252               	.LM108:
+ 1253 07fc C701      		movw r24,r14
+ 1254 07fe B601      		movw r22,r12
+ 1255 0800 0E94 0000 		call FAT_NextCluster
+ 1256 0804 6B01      		movw r12,r22
+ 1257 0806 7C01      		movw r14,r24
+ 1258               	.LM109:
+ 1259 0808 6F3F      		cpi r22,lo8(268435455)
+ 1260 080a FFEF      		ldi r31,hi8(268435455)
+ 1261 080c 7F07      		cpc r23,r31
+ 1262 080e FFEF      		ldi r31,hlo8(268435455)
+ 1263 0810 8F07      		cpc r24,r31
+ 1264 0812 FFE0      		ldi r31,hhi8(268435455)
+ 1265 0814 9F07      		cpc r25,r31
+ 1266 0816 01F0      		breq .L63
+ 1267               	.LVL89:
+ 1268 0818 88EF      		ldi r24,lo8(268435448)
+ 1269 081a C816      		cp r12,r24
+ 1270 081c 8FEF      		ldi r24,hi8(268435448)
+ 1271 081e D806      		cpc r13,r24
+ 1272 0820 8FEF      		ldi r24,hlo8(268435448)
+ 1273 0822 E806      		cpc r14,r24
+ 1274 0824 8FE0      		ldi r24,hhi8(268435448)
+ 1275 0826 F806      		cpc r15,r24
+ 1276 0828 01F0      		breq .L63
+ 1277               	.LVL90:
+ 1278 082a 8091 0000 		lds r24,FAT32_Enable
+ 1279 082e 8823      		tst r24
+ 1280 0830 01F0      		breq .+2
+ 1281 0832 00C0      		rjmp .L76
+ 1282 0834 EFEF      		ldi r30,lo8(65535)
+ 1283 0836 CE16      		cp r12,r30
+ 1284 0838 EFEF      		ldi r30,hi8(65535)
+ 1285 083a DE06      		cpc r13,r30
+ 1286 083c E0E0      		ldi r30,hlo8(65535)
+ 1287 083e EE06      		cpc r14,r30
+ 1288 0840 E0E0      		ldi r30,hhi8(65535)
+ 1289 0842 FE06      		cpc r15,r30
+ 1290 0844 01F0      		breq .+2
+ 1291 0846 00C0      		rjmp .L76
+ 1292 0848 00C0      		rjmp .L63
+ 1293               	.LVL91:
+ 1294               	.L58:
+ 1295 084a 81E0      		ldi r24,lo8(1)
+ 1296 084c 00C0      		rjmp .L61
+ 1297               	.LVL92:
+ 1298               	.L63:
+ 1299 084e 80E0      		ldi r24,lo8(0)
+ 1300               	.L61:
+ 1301               	/* epilogue start */
+ 1302               	.LM110:
+ 1303 0850 DF91      		pop r29
+ 1304 0852 CF91      		pop r28
+ 1305 0854 1F91      		pop r17
+ 1306 0856 0F91      		pop r16
+ 1307 0858 FF90      		pop r15
+ 1308 085a EF90      		pop r14
+ 1309 085c DF90      		pop r13
+ 1310 085e CF90      		pop r12
+ 1311               	.LVL93:
+ 1312 0860 BF90      		pop r11
+ 1313 0862 AF90      		pop r10
+ 1314 0864 9F90      		pop r9
+ 1315 0866 8F90      		pop r8
+ 1316               	.LVL94:
+ 1317 0868 7F90      		pop r7
+ 1318               	.LVL95:
+ 1319 086a 5F90      		pop r5
+ 1320 086c 4F90      		pop r4
+ 1321               	.LVL96:
+ 1322 086e 3F90      		pop r3
+ 1323 0870 2F90      		pop r2
+ 1324 0872 0895      		ret
+ 1325               	.LFE9:
+ 1327               	.global	SearchInit
+ 1329               	SearchInit:
+ 1330               	.LFB10:
+ 1331               	.LM111:
+ 1332 0874 CF92      		push r12
+ 1333 0876 DF92      		push r13
+ 1334 0878 EF92      		push r14
+ 1335 087a FF92      		push r15
+ 1336 087c 0F93      		push r16
+ 1337 087e 1F93      		push r17
+ 1338 0880 DF93      		push r29
+ 1339 0882 CF93      		push r28
+ 1340 0884 00D0      		rcall .
+ 1341 0886 CDB7      		in r28,__SP_L__
+ 1342 0888 DEB7      		in r29,__SP_H__
+ 1343               	/* prologue: function */
+ 1344               	/* frame size = 2 */
+ 1345               	.LM112:
+ 1346 088a 8091 0000 		lds r24,FAT32_Enable
+ 1347 088e 8823      		tst r24
+ 1348 0890 01F0      		breq .L79
+ 1349               	.LM113:
+ 1350 0892 4091 0000 		lds r20,FirstDirClust
+ 1351 0896 5091 0000 		lds r21,(FirstDirClust)+1
+ 1352 089a 6091 0000 		lds r22,(FirstDirClust)+2
+ 1353 089e 7091 0000 		lds r23,(FirstDirClust)+3
+ 1354 08a2 80E0      		ldi r24,lo8(0)
+ 1355 08a4 90E0      		ldi r25,hi8(0)
+ 1356 08a6 00C0      		rjmp .L86
+ 1357               	.L79:
+ 1358               	.LM114:
+ 1359 08a8 80E0      		ldi r24,lo8(0)
+ 1360 08aa 90E0      		ldi r25,hi8(0)
+ 1361 08ac 40E0      		ldi r20,lo8(0)
+ 1362 08ae 50E0      		ldi r21,hi8(0)
+ 1363 08b0 60E0      		ldi r22,hlo8(0)
+ 1364 08b2 70E0      		ldi r23,hhi8(0)
+ 1365               	.L86:
+ 1366 08b4 0E94 0000 		call WriteFolderCluster
+ 1367               	.LM115:
+ 1368 08b8 84E0      		ldi r24,lo8(4)
+ 1369 08ba 90E0      		ldi r25,hi8(4)
+ 1370 08bc 4FEF      		ldi r20,lo8(-1)
+ 1371 08be 5FEF      		ldi r21,hi8(-1)
+ 1372 08c0 6FEF      		ldi r22,hlo8(-1)
+ 1373 08c2 7FEF      		ldi r23,hhi8(-1)
+ 1374 08c4 0E94 0000 		call WriteFolderCluster
+ 1375               	.LM116:
+ 1376 08c8 84E0      		ldi r24,lo8(4)
+ 1377 08ca 90E0      		ldi r25,hi8(4)
+ 1378 08cc 9A83      		std Y+2,r25
+ 1379 08ce 8983      		std Y+1,r24
+ 1380               	.LVL97:
+ 1381 08d0 EE24      		clr r14
+ 1382 08d2 FF24      		clr r15
+ 1383               	.LVL98:
+ 1384               	.LM117:
+ 1385 08d4 6E01      		movw r12,r28
+ 1386 08d6 0894      		sec
+ 1387 08d8 C11C      		adc r12,__zero_reg__
+ 1388 08da D11C      		adc r13,__zero_reg__
+ 1389               	.L84:
+ 1390               	.LM118:
+ 1391 08dc C701      		movw r24,r14
+ 1392 08de 0E94 0000 		call GetFolderCluster
+ 1393               	.LM119:
+ 1394 08e2 6F3F      		cpi r22,lo8(-1)
+ 1395 08e4 2FEF      		ldi r18,hi8(-1)
+ 1396 08e6 7207      		cpc r23,r18
+ 1397 08e8 2FEF      		ldi r18,hlo8(-1)
+ 1398 08ea 8207      		cpc r24,r18
+ 1399 08ec 2FEF      		ldi r18,hhi8(-1)
+ 1400 08ee 9207      		cpc r25,r18
+ 1401               	.LVL99:
+ 1402 08f0 01F0      		breq .L78
+ 1403               	.LM120:
+ 1404 08f2 A601      		movw r20,r12
+ 1405 08f4 0E94 0000 		call SearchFolder
+ 1406               	.LVL100:
+ 1407               	.LM121:
+ 1408 08f8 0981      		ldd r16,Y+1
+ 1409 08fa 1A81      		ldd r17,Y+2
+ 1410 08fc C801      		movw r24,r16
+ 1411 08fe 0E94 0000 		call GetFolderCluster
+ 1412 0902 6F5F      		subi r22,lo8(-1)
+ 1413 0904 7F4F      		sbci r23,hi8(-1)
+ 1414 0906 8F4F      		sbci r24,hlo8(-1)
+ 1415 0908 9F4F      		sbci r25,hhi8(-1)
+ 1416 090a 01F0      		breq .L82
+ 1417               	.LM122:
+ 1418 090c C801      		movw r24,r16
+ 1419 090e 4FEF      		ldi r20,lo8(-1)
+ 1420 0910 5FEF      		ldi r21,hi8(-1)
+ 1421 0912 6FEF      		ldi r22,hlo8(-1)
+ 1422 0914 7FEF      		ldi r23,hhi8(-1)
+ 1423 0916 0E94 0000 		call WriteFolderCluster
+ 1424               	.L82:
+ 1425               	.LM123:
+ 1426 091a 8981      		ldd r24,Y+1
+ 1427 091c 9A81      		ldd r25,Y+2
+ 1428 091e 8050      		subi r24,lo8(512)
+ 1429 0920 9240      		sbci r25,hi8(512)
+ 1430 0922 01F4      		brne .L83
+ 1431               	.LVL101:
+ 1432               	.LM124:
+ 1433 0924 8CEF      		ldi r24,lo8(508)
+ 1434 0926 91E0      		ldi r25,hi8(508)
+ 1435               	.LVL102:
+ 1436 0928 4FEF      		ldi r20,lo8(-1)
+ 1437 092a 5FEF      		ldi r21,hi8(-1)
+ 1438 092c 6FEF      		ldi r22,hlo8(-1)
+ 1439 092e 7FEF      		ldi r23,hhi8(-1)
+ 1440 0930 0E94 0000 		call WriteFolderCluster
+ 1441 0934 00C0      		rjmp .L78
+ 1442               	.LVL103:
+ 1443               	.L83:
+ 1444               	.LM125:
+ 1445 0936 84E0      		ldi r24,lo8(4)
+ 1446 0938 90E0      		ldi r25,hi8(4)
+ 1447               	.LVL104:
+ 1448 093a E80E      		add r14,r24
+ 1449 093c F91E      		adc r15,r25
+ 1450 093e 00C0      		rjmp .L84
+ 1451               	.LVL105:
+ 1452               	.L78:
+ 1453               	.LM126:
+ 1454 0940 80E0      		ldi r24,lo8(0)
+ 1455               	/* epilogue start */
+ 1456 0942 0F90      		pop __tmp_reg__
+ 1457 0944 0F90      		pop __tmp_reg__
+ 1458 0946 CF91      		pop r28
+ 1459 0948 DF91      		pop r29
+ 1460 094a 1F91      		pop r17
+ 1461 094c 0F91      		pop r16
+ 1462 094e FF90      		pop r15
+ 1463 0950 EF90      		pop r14
+ 1464               	.LVL106:
+ 1465 0952 DF90      		pop r13
+ 1466 0954 CF90      		pop r12
+ 1467 0956 0895      		ret
+ 1468               	.LFE10:
+ 1470               	.global	FAT_Init
+ 1472               	FAT_Init:
+ 1473               	.LFB3:
+ 1474               	.LM127:
+ 1475 0958 8F92      		push r8
+ 1476 095a 9F92      		push r9
+ 1477 095c AF92      		push r10
+ 1478 095e BF92      		push r11
+ 1479 0960 CF92      		push r12
+ 1480 0962 DF92      		push r13
+ 1481 0964 EF92      		push r14
+ 1482 0966 FF92      		push r15
+ 1483 0968 0F93      		push r16
+ 1484 096a 1F93      		push r17
+ 1485 096c DF93      		push r29
+ 1486 096e CF93      		push r28
+ 1487 0970 CDB7      		in r28,__SP_L__
+ 1488 0972 DEB7      		in r29,__SP_H__
+ 1489 0974 C050      		subi r28,lo8(-(-512))
+ 1490 0976 D240      		sbci r29,hi8(-(-512))
+ 1491 0978 0FB6      		in __tmp_reg__,__SREG__
+ 1492 097a F894      		cli
+ 1493 097c DEBF      		out __SP_H__,r29
+ 1494 097e 0FBE      		out __SREG__,__tmp_reg__
+ 1495 0980 CDBF      		out __SP_L__,r28
+ 1496               	/* prologue: function */
+ 1497               	/* frame size = 512 */
+ 1498               	.LM128:
+ 1499 0982 0E94 0000 		call MMC_SD_ReadCapacity
+ 1500 0986 7B01      		movw r14,r22
+ 1501 0988 8C01      		movw r16,r24
+ 1502               	.LVL107:
+ 1503               	.LM129:
+ 1504 098a 8FEF      		ldi r24,lo8(255)
+ 1505 098c E816      		cp r14,r24
+ 1506 098e F104      		cpc r15,__zero_reg__
+ 1507 0990 0105      		cpc r16,__zero_reg__
+ 1508 0992 1105      		cpc r17,__zero_reg__
+ 1509 0994 00F4      		brsh .+2
+ 1510 0996 00C0      		rjmp .L88
+ 1511               	.LM130:
+ 1512 0998 E091 0000 		lds r30,FAT_ReadSector
+ 1513 099c F091 0000 		lds r31,(FAT_ReadSector)+1
+ 1514 09a0 60E0      		ldi r22,lo8(0)
+ 1515 09a2 70E0      		ldi r23,hi8(0)
+ 1516 09a4 80E0      		ldi r24,hlo8(0)
+ 1517 09a6 90E0      		ldi r25,hhi8(0)
+ 1518 09a8 4E01      		movw r8,r28
+ 1519 09aa 0894      		sec
+ 1520 09ac 811C      		adc r8,__zero_reg__
+ 1521 09ae 911C      		adc r9,__zero_reg__
+ 1522 09b0 A401      		movw r20,r8
+ 1523 09b2 0995      		icall
+ 1524 09b4 8823      		tst r24
+ 1525 09b6 01F0      		breq .+2
+ 1526 09b8 00C0      		rjmp .L88
+ 1527               	.LM131:
+ 1528 09ba FE01      		movw r30,r28
+ 1529 09bc E154      		subi r30,lo8(-(447))
+ 1530 09be FE4F      		sbci r31,hi8(-(447))
+ 1531 09c0 A084      		ldd r10,Z+8
+ 1532 09c2 B184      		ldd r11,Z+9
+ 1533 09c4 C284      		ldd r12,Z+10
+ 1534 09c6 D384      		ldd r13,Z+11
+ 1535               	.LVL108:
+ 1536               	.LM132:
+ 1537 09c8 99E0      		ldi r25,9
+ 1538 09ca 1695      	1:	lsr r17
+ 1539 09cc 0795      		ror r16
+ 1540 09ce F794      		ror r15
+ 1541 09d0 E794      		ror r14
+ 1542 09d2 9A95      		dec r25
+ 1543 09d4 01F4      		brne 1b
+ 1544 09d6 AE14      		cp r10,r14
+ 1545 09d8 BF04      		cpc r11,r15
+ 1546 09da C006      		cpc r12,r16
+ 1547 09dc D106      		cpc r13,r17
+ 1548 09de 00F4      		brsh .L89
+ 1549               	.LM133:
+ 1550 09e0 E091 0000 		lds r30,FAT_ReadSector
+ 1551 09e4 F091 0000 		lds r31,(FAT_ReadSector)+1
+ 1552 09e8 C601      		movw r24,r12
+ 1553 09ea B501      		movw r22,r10
+ 1554 09ec A401      		movw r20,r8
+ 1555 09ee 0995      		icall
+ 1556 09f0 8823      		tst r24
+ 1557 09f2 01F0      		breq .+2
+ 1558 09f4 00C0      		rjmp .L88
+ 1559               	.LM134:
+ 1560 09f6 D401      		movw r26,r8
+ 1561 09f8 8C91      		ld r24,X
+ 1562 09fa 893E      		cpi r24,lo8(-23)
+ 1563 09fc 01F0      		breq .L90
+ 1564 09fe 8B3E      		cpi r24,lo8(-21)
+ 1565 0a00 01F0      		breq .L90
+ 1566               	.LM135:
+ 1567 0a02 E091 0000 		lds r30,FAT_ReadSector
+ 1568 0a06 F091 0000 		lds r31,(FAT_ReadSector)+1
+ 1569 0a0a 60E0      		ldi r22,lo8(0)
+ 1570 0a0c 70E0      		ldi r23,hi8(0)
+ 1571 0a0e 80E0      		ldi r24,hlo8(0)
+ 1572 0a10 90E0      		ldi r25,hhi8(0)
+ 1573 0a12 A401      		movw r20,r8
+ 1574 0a14 0995      		icall
+ 1575 0a16 8823      		tst r24
+ 1576 0a18 01F0      		breq .+2
+ 1577 0a1a 00C0      		rjmp .L88
+ 1578               	.L89:
+ 1579 0a1c AA24      		clr r10
+ 1580 0a1e BB24      		clr r11
+ 1581 0a20 6501      		movw r12,r10
+ 1582               	.L90:
+ 1583               	.LM136:
+ 1584 0a22 F401      		movw r30,r8
+ 1585 0a24 8081      		ld r24,Z
+ 1586 0a26 893E      		cpi r24,lo8(-23)
+ 1587 0a28 01F0      		breq .L91
+ 1588 0a2a 8B3E      		cpi r24,lo8(-21)
+ 1589 0a2c 01F0      		breq .+2
+ 1590 0a2e 00C0      		rjmp .L88
+ 1591               	.L91:
+ 1592               	.LM137:
+ 1593 0a30 F401      		movw r30,r8
+ 1594               	.LVL109:
+ 1595 0a32 3B96      		adiw r30,11
+ 1596               	.LM138:
+ 1597 0a34 8385      		ldd r24,Z+11
+ 1598 0a36 9485      		ldd r25,Z+12
+ 1599 0a38 0097      		sbiw r24,0
+ 1600 0a3a 01F0      		breq .L92
+ 1601               	.LM139:
+ 1602 0a3c 1092 0000 		sts FAT32_Enable,__zero_reg__
+ 1603               	.LM140:
+ 1604 0a40 9093 0000 		sts (FATsectors)+1,r25
+ 1605 0a44 8093 0000 		sts FATsectors,r24
+ 1606               	.LM141:
+ 1607 0a48 82E0      		ldi r24,lo8(2)
+ 1608 0a4a 90E0      		ldi r25,hi8(2)
+ 1609 0a4c A0E0      		ldi r26,hlo8(2)
+ 1610 0a4e B0E0      		ldi r27,hhi8(2)
+ 1611 0a50 00C0      		rjmp .L96
+ 1612               	.L92:
+ 1613               	.LM142:
+ 1614 0a52 81E0      		ldi r24,lo8(1)
+ 1615 0a54 8093 0000 		sts FAT32_Enable,r24
+ 1616               	.LM143:
+ 1617 0a58 818D      		ldd r24,Z+25
+ 1618 0a5a 928D      		ldd r25,Z+26
+ 1619 0a5c 9093 0000 		sts (FATsectors)+1,r25
+ 1620 0a60 8093 0000 		sts FATsectors,r24
+ 1621               	.LM144:
+ 1622 0a64 81A1      		ldd r24,Z+33
+ 1623 0a66 92A1      		ldd r25,Z+34
+ 1624 0a68 A3A1      		ldd r26,Z+35
+ 1625 0a6a B4A1      		ldd r27,Z+36
+ 1626               	.L96:
+ 1627 0a6c 8093 0000 		sts FirstDirClust,r24
+ 1628 0a70 9093 0000 		sts (FirstDirClust)+1,r25
+ 1629 0a74 A093 0000 		sts (FirstDirClust)+2,r26
+ 1630 0a78 B093 0000 		sts (FirstDirClust)+3,r27
+ 1631               	.LM145:
+ 1632 0a7c D401      		movw r26,r8
+ 1633 0a7e 1B96      		adiw r26,11
+ 1634 0a80 8D91      		ld r24,X+
+ 1635 0a82 9C91      		ld r25,X
+ 1636 0a84 1C97      		sbiw r26,11+1
+ 1637 0a86 9093 0000 		sts (BytesPerSector)+1,r25
+ 1638 0a8a 8093 0000 		sts BytesPerSector,r24
+ 1639               	.LM146:
+ 1640 0a8e 8281      		ldd r24,Z+2
+ 1641 0a90 8093 0000 		sts SectorsPerClust,r24
+ 1642 0a94 1092 0000 		sts SectorsPerClust+1,__zero_reg__
+ 1643               	.LM147:
+ 1644 0a98 E380      		ldd r14,Z+3
+ 1645 0a9a F480      		ldd r15,Z+4
+ 1646               	.LVL110:
+ 1647 0a9c 00E0      		ldi r16,lo8(0)
+ 1648 0a9e 10E0      		ldi r17,hi8(0)
+ 1649 0aa0 EA0C      		add r14,r10
+ 1650 0aa2 FB1C      		adc r15,r11
+ 1651 0aa4 0C1D      		adc r16,r12
+ 1652 0aa6 1D1D      		adc r17,r13
+ 1653 0aa8 E092 0000 		sts FirstFATSector,r14
+ 1654 0aac F092 0000 		sts (FirstFATSector)+1,r15
+ 1655 0ab0 0093 0000 		sts (FirstFATSector)+2,r16
+ 1656 0ab4 1093 0000 		sts (FirstFATSector)+3,r17
+ 1657               	.LM148:
+ 1658 0ab8 2681      		ldd r18,Z+6
+ 1659 0aba 3781      		ldd r19,Z+7
+ 1660 0abc 40E0      		ldi r20,lo8(0)
+ 1661 0abe 50E0      		ldi r21,hi8(0)
+ 1662 0ac0 2093 0000 		sts RootDirCount,r18
+ 1663 0ac4 3093 0000 		sts (RootDirCount)+1,r19
+ 1664 0ac8 4093 0000 		sts (RootDirCount)+2,r20
+ 1665 0acc 5093 0000 		sts (RootDirCount)+3,r21
+ 1666               	.LM149:
+ 1667 0ad0 84E0      		ldi r24,4
+ 1668 0ad2 5695      	1:	lsr r21
+ 1669 0ad4 4795      		ror r20
+ 1670 0ad6 3795      		ror r19
+ 1671 0ad8 2795      		ror r18
+ 1672 0ada 8A95      		dec r24
+ 1673 0adc 01F4      		brne 1b
+ 1674 0ade 2093 0000 		sts RootDirSectors,r18
+ 1675 0ae2 3093 0000 		sts (RootDirSectors)+1,r19
+ 1676 0ae6 4093 0000 		sts (RootDirSectors)+2,r20
+ 1677 0aea 5093 0000 		sts (RootDirSectors)+3,r21
+ 1678               	.LM150:
+ 1679 0aee 8581      		ldd r24,Z+5
+ 1680 0af0 90E0      		ldi r25,lo8(0)
+ 1681 0af2 6091 0000 		lds r22,FATsectors
+ 1682 0af6 7091 0000 		lds r23,(FATsectors)+1
+ 1683 0afa FC01      		movw r30,r24
+ 1684               	.LVL111:
+ 1685 0afc E69F      		mul r30,r22
+ 1686 0afe C001      		movw r24,r0
+ 1687 0b00 E79F      		mul r30,r23
+ 1688 0b02 900D      		add r25,r0
+ 1689 0b04 F69F      		mul r31,r22
+ 1690 0b06 900D      		add r25,r0
+ 1691 0b08 1124      		clr r1
+ 1692 0b0a A0E0      		ldi r26,lo8(0)
+ 1693 0b0c B0E0      		ldi r27,hi8(0)
+ 1694 0b0e 8E0D      		add r24,r14
+ 1695 0b10 9F1D      		adc r25,r15
+ 1696 0b12 A01F      		adc r26,r16
+ 1697 0b14 B11F      		adc r27,r17
+ 1698 0b16 8093 0000 		sts FirstDirSector,r24
+ 1699 0b1a 9093 0000 		sts (FirstDirSector)+1,r25
+ 1700 0b1e A093 0000 		sts (FirstDirSector)+2,r26
+ 1701 0b22 B093 0000 		sts (FirstDirSector)+3,r27
+ 1702               	.LM151:
+ 1703 0b26 820F      		add r24,r18
+ 1704 0b28 931F      		adc r25,r19
+ 1705 0b2a A41F      		adc r26,r20
+ 1706 0b2c B51F      		adc r27,r21
+ 1707 0b2e 8093 0000 		sts FirstDataSector,r24
+ 1708 0b32 9093 0000 		sts (FirstDataSector)+1,r25
+ 1709 0b36 A093 0000 		sts (FirstDataSector)+2,r26
+ 1710 0b3a B093 0000 		sts (FirstDataSector)+3,r27
+ 1711 0b3e 80E0      		ldi r24,lo8(0)
+ 1712 0b40 00C0      		rjmp .L94
+ 1713               	.LVL112:
+ 1714               	.L88:
+ 1715               	.LM152:
+ 1716 0b42 81E0      		ldi r24,lo8(1)
+ 1717               	.L94:
+ 1718               	/* epilogue start */
+ 1719               	.LM153:
+ 1720 0b44 C050      		subi r28,lo8(-(512))
+ 1721 0b46 DE4F      		sbci r29,hi8(-(512))
+ 1722 0b48 0FB6      		in __tmp_reg__,__SREG__
+ 1723 0b4a F894      		cli
+ 1724 0b4c DEBF      		out __SP_H__,r29
+ 1725 0b4e 0FBE      		out __SREG__,__tmp_reg__
+ 1726 0b50 CDBF      		out __SP_L__,r28
+ 1727 0b52 CF91      		pop r28
+ 1728 0b54 DF91      		pop r29
+ 1729 0b56 1F91      		pop r17
+ 1730 0b58 0F91      		pop r16
+ 1731 0b5a FF90      		pop r15
+ 1732 0b5c EF90      		pop r14
+ 1733               	.LVL113:
+ 1734 0b5e DF90      		pop r13
+ 1735 0b60 CF90      		pop r12
+ 1736 0b62 BF90      		pop r11
+ 1737 0b64 AF90      		pop r10
+ 1738               	.LVL114:
+ 1739 0b66 9F90      		pop r9
+ 1740 0b68 8F90      		pop r8
+ 1741 0b6a 0895      		ret
+ 1742               	.LFE3:
+ 1744               	.global	FAT_ReadSector
+ 1745               		.data
+ 1748               	FAT_ReadSector:
+ 1749 0000 0000      		.word	gs(MMC_SD_ReadSingleBlock)
+ 1750               	.global	FAT_WriteSector
+ 1753               	FAT_WriteSector:
+ 1754 0002 0000      		.word	gs(MMC_SD_WriteSingleBlock)
+ 1755               		.comm FirstDirClust,4,1
+ 1756               		.comm FirstDataSector,4,1
+ 1757               		.comm BytesPerSector,2,1
+ 1758               		.comm FATsectors,2,1
+ 1759               		.comm SectorsPerClust,2,1
+ 1760               		.comm FirstFATSector,4,1
+ 1761               		.comm FirstDirSector,4,1
+ 1762               		.comm RootDirSectors,4,1
+ 1763               		.comm RootDirCount,4,1
+ 1764               		.comm FAT32_Enable,1,1
+ 1765               		.comm FileInfo,15,1
+ 1854               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 FAT.c
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:2      *ABS*:0000003f __SREG__
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:3      *ABS*:0000003e __SP_H__
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:4      *ABS*:0000003d __SP_L__
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:5      *ABS*:00000034 __CCP__
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:18     .text:00000000 FAT_LoadPartCluster
+                            *COM*:00000002 SectorsPerClust
+                            *COM*:00000004 FirstDataSector
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:1748   .data:00000000 FAT_ReadSector
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:85     .text:0000006a FAT_NextCluster
+                            *COM*:00000001 FAT32_Enable
+                            *COM*:00000004 FirstFATSector
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:252    .text:0000017c CopyDirentruyItem
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:352    .text:0000020a GetFolderCluster
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:436    .text:0000027e Search
+                            *COM*:00000004 FirstDirSector
+                            *COM*:00000004 RootDirSectors
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:895    .text:00000592 WriteFolderCluster
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:955    .text:000005ec SearchFolder
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:1329   .text:00000874 SearchInit
+                            *COM*:00000004 FirstDirClust
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:1472   .text:00000958 FAT_Init
+                            *COM*:00000002 FATsectors
+                            *COM*:00000002 BytesPerSector
+                            *COM*:00000004 RootDirCount
+C:\Users\Newman\AppData\Local\Temp/cc8r4pfi.s:1753   .data:00000002 FAT_WriteSector
+                            *COM*:0000000f FileInfo
+
+UNDEFINED SYMBOLS
+__mulsi3
+__eerd_byte_m32
+malloc
+free
+__eewr_byte_m32
+MMC_SD_ReadCapacity
+MMC_SD_ReadSingleBlock
+MMC_SD_WriteSingleBlock
+__do_copy_data
+__do_clear_bss

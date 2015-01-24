@@ -1,0 +1,237 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	delay_ms
+  18               	delay_ms:
+  19               	.LFB7:
+  20               	.LM1:
+  21               	.LVL0:
+  22               	/* prologue: function */
+  23               	/* frame size = 0 */
+  24               	.LBB21:
+  25               	.LBB22:
+  26               	.LBB23:
+  27               	.LBB24:
+  28               	.LM2:
+  29 0000 20ED      		ldi r18,lo8(2000)
+  30 0002 37E0      		ldi r19,hi8(2000)
+  31 0004 00C0      		rjmp .L2
+  32               	.LVL1:
+  33               	.L3:
+  34 0006 F901      		movw r30,r18
+  35               	/* #APP */
+  36               	 ;  105 "d:/program files/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+  37 0008 3197      		1: sbiw r30,1
+  38 000a 01F4      		brne 1b
+  39               	 ;  0 "" 2
+  40               	/* #NOAPP */
+  41               	.L2:
+  42               	.LBE24:
+  43               	.LBE23:
+  44               	.LBE22:
+  45               	.LBE21:
+  46               	.LM3:
+  47 000c 0197      		sbiw r24,1
+  48 000e 4FEF      		ldi r20,hi8(-1)
+  49 0010 8F3F      		cpi r24,lo8(-1)
+  50 0012 9407      		cpc r25,r20
+  51 0014 01F4      		brne .L3
+  52               	/* epilogue start */
+  53               	.LM4:
+  54 0016 0895      		ret
+  55               	.LFE7:
+  57               	.global	main
+  59               	main:
+  60               	.LFB8:
+  61               	.LM5:
+  62 0018 6F92      		push r6
+  63 001a 7F92      		push r7
+  64 001c 8F92      		push r8
+  65 001e 9F92      		push r9
+  66 0020 AF92      		push r10
+  67 0022 BF92      		push r11
+  68 0024 CF92      		push r12
+  69 0026 DF92      		push r13
+  70 0028 EF92      		push r14
+  71 002a FF92      		push r15
+  72 002c 0F93      		push r16
+  73 002e 1F93      		push r17
+  74 0030 CF93      		push r28
+  75 0032 DF93      		push r29
+  76               	/* prologue: function */
+  77               	/* frame size = 0 */
+  78               	.LM6:
+  79 0034 8E9A      		sbi 49-32,6
+  80               	.LM7:
+  81 0036 B89A      		sbi 55-32,0
+  82               	.LM8:
+  83 0038 969A      		sbi 50-32,6
+  84               	.LM9:
+  85 003a C098      		cbi 56-32,0
+  86               	.LM10:
+  87 003c 8D98      		cbi 49-32,5
+  88 003e 959A      		sbi 50-32,5
+  89               	.LM11:
+  90 0040 17B8      		out 39-32,__zero_reg__
+  91 0042 80EC      		ldi r24,lo8(-64)
+  92 0044 86B9      		out 38-32,r24
+  93 0046 D898      		cbi 59-32,0
+  94 0048 D098      		cbi 58-32,0
+  95               	.LM12:
+  96 004a 8FEF      		ldi r24,lo8(-1)
+  97 004c 84BB      		out 52-32,r24
+  98               	.LM13:
+  99 004e 0E94 0000 		call LCD_Init
+ 100               	.LM14:
+ 101 0052 8599      		sbic 48-32,5
+ 102 0054 00C0      		rjmp .L15
+ 103 0056 00E0      		ldi r16,lo8(0)
+ 104 0058 10E0      		ldi r17,hi8(0)
+ 105               	.LVL2:
+ 106               	.LBB25:
+ 107               	.LBB26:
+ 108               	.LBB27:
+ 109               	.LBB28:
+ 110               	.LBB29:
+ 111               	.LBB30:
+ 112               	.LBB31:
+ 113               	.LM15:
+ 114 005a C0ED      		ldi r28,lo8(2000)
+ 115 005c D7E0      		ldi r29,hi8(2000)
+ 116               	.LVL3:
+ 117               	.L11:
+ 118               	.LBE31:
+ 119               	.LBE30:
+ 120               	.LBE29:
+ 121               	.LBE28:
+ 122               	.LBE27:
+ 123               	.LBE26:
+ 124               	.LM16:
+ 125 005e C801      		movw r24,r16
+ 126               	.LVL4:
+ 127 0060 0E94 0000 		call LCD_Clear
+ 128               	.LVL5:
+ 129               	.LM17:
+ 130 0064 012B      		or r16,r17
+ 131 0066 01F4      		brne .L7
+ 132 0068 0FEF      		ldi r16,lo8(-1)
+ 133 006a 1FEF      		ldi r17,hi8(-1)
+ 134 006c 00C0      		rjmp .L8
+ 135               	.L7:
+ 136 006e 00E0      		ldi r16,lo8(0)
+ 137 0070 10E0      		ldi r17,hi8(0)
+ 138               	.L8:
+ 139 0072 8CE2      		ldi r24,lo8(300)
+ 140 0074 91E0      		ldi r25,hi8(300)
+ 141               	.LVL6:
+ 142 0076 00C0      		rjmp .L9
+ 143               	.LVL7:
+ 144               	.L10:
+ 145               	.LBB37:
+ 146               	.LBB36:
+ 147               	.LBB35:
+ 148               	.LBB34:
+ 149               	.LBB33:
+ 150               	.LBB32:
+ 151               	.LM18:
+ 152 0078 FE01      		movw r30,r28
+ 153               	/* #APP */
+ 154               	 ;  105 "d:/program files/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+ 155 007a 3197      		1: sbiw r30,1
+ 156 007c 01F4      		brne 1b
+ 157               	 ;  0 "" 2
+ 158               	/* #NOAPP */
+ 159               	.L9:
+ 160               	.LBE32:
+ 161               	.LBE33:
+ 162               	.LBE34:
+ 163               	.LBE35:
+ 164               	.LM19:
+ 165 007e 0197      		sbiw r24,1
+ 166 0080 2FEF      		ldi r18,hi8(-1)
+ 167 0082 8F3F      		cpi r24,lo8(-1)
+ 168 0084 9207      		cpc r25,r18
+ 169 0086 01F4      		brne .L10
+ 170 0088 00C0      		rjmp .L11
+ 171               	.LVL8:
+ 172               	.L15:
+ 173               	.LBE36:
+ 174               	.LBE37:
+ 175               	.LBE25:
+ 176               	.LBB38:
+ 177               	.LM20:
+ 178 008a 80E0      		ldi r24,lo8(0)
+ 179 008c 90E0      		ldi r25,hi8(0)
+ 180 008e 0E94 0000 		call LCD_Clear
+ 181 0092 C0E0      		ldi r28,lo8(0)
+ 182 0094 D0E0      		ldi r29,hi8(0)
+ 183               	.L12:
+ 184               	.LM21:
+ 185 0096 0E94 0000 		call rand
+ 186 009a 7C01      		movw r14,r24
+ 187 009c 0E94 0000 		call rand
+ 188 00a0 6C01      		movw r12,r24
+ 189 00a2 0E94 0000 		call rand
+ 190 00a6 5C01      		movw r10,r24
+ 191 00a8 0E94 0000 		call rand
+ 192 00ac 3C01      		movw r6,r24
+ 193 00ae 0E94 0000 		call rand
+ 194 00b2 8C01      		movw r16,r24
+ 195 00b4 C701      		movw r24,r14
+ 196 00b6 6FE3      		ldi r22,lo8(319)
+ 197 00b8 71E0      		ldi r23,hi8(319)
+ 198 00ba 0E94 0000 		call __divmodhi4
+ 199 00be 4C01      		movw r8,r24
+ 200 00c0 C601      		movw r24,r12
+ 201 00c2 6FEE      		ldi r22,lo8(239)
+ 202 00c4 70E0      		ldi r23,hi8(239)
+ 203 00c6 0E94 0000 		call __divmodhi4
+ 204 00ca 7C01      		movw r14,r24
+ 205 00cc C501      		movw r24,r10
+ 206 00ce 6FE3      		ldi r22,lo8(319)
+ 207 00d0 71E0      		ldi r23,hi8(319)
+ 208 00d2 0E94 0000 		call __divmodhi4
+ 209 00d6 FC01      		movw r30,r24
+ 210 00d8 C301      		movw r24,r6
+ 211 00da 6FEE      		ldi r22,lo8(239)
+ 212 00dc 70E0      		ldi r23,hi8(239)
+ 213 00de 0E94 0000 		call __divmodhi4
+ 214 00e2 9C01      		movw r18,r24
+ 215 00e4 000F      		lsl r16
+ 216 00e6 111F      		rol r17
+ 217 00e8 C401      		movw r24,r8
+ 218 00ea B701      		movw r22,r14
+ 219 00ec AF01      		movw r20,r30
+ 220 00ee 0E94 0000 		call LCD_DrawLine
+ 221               	.LM22:
+ 222 00f2 2196      		adiw r28,1
+ 223 00f4 83E0      		ldi r24,hi8(1000)
+ 224 00f6 C83E      		cpi r28,lo8(1000)
+ 225 00f8 D807      		cpc r29,r24
+ 226 00fa 01F4      		brne .L12
+ 227 00fc 00C0      		rjmp .L15
+ 228               	.LBE38:
+ 229               	.LFE8:
+ 263               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:2      *ABS*:0000003f __SREG__
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:3      *ABS*:0000003e __SP_H__
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:4      *ABS*:0000003d __SP_L__
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:5      *ABS*:00000034 __CCP__
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:18     .text:00000000 delay_ms
+C:\Users\Newman\AppData\Local\Temp/ccA0Ztak.s:59     .text:00000018 main
+
+UNDEFINED SYMBOLS
+LCD_Init
+LCD_Clear
+rand
+__divmodhi4
+LCD_DrawLine

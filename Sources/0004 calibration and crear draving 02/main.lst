@@ -1,0 +1,493 @@
+   1               		.file	"main.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	delay_ms
+  18               	delay_ms:
+  19               	.LFB7:
+  20               	.LM1:
+  21               	.LVL0:
+  22               	/* prologue: function */
+  23               	/* frame size = 0 */
+  24               	.LBB12:
+  25               	.LBB13:
+  26               	.LBB14:
+  27               	.LBB15:
+  28               	.LM2:
+  29 0000 20ED      		ldi r18,lo8(2000)
+  30 0002 37E0      		ldi r19,hi8(2000)
+  31 0004 00C0      		rjmp .L2
+  32               	.LVL1:
+  33               	.L3:
+  34 0006 F901      		movw r30,r18
+  35               	/* #APP */
+  36               	 ;  105 "d:/program files/winavr/lib/gcc/../../avr/include/util/delay_basic.h" 1
+  37 0008 3197      		1: sbiw r30,1
+  38 000a 01F4      		brne 1b
+  39               	 ;  0 "" 2
+  40               	/* #NOAPP */
+  41               	.L2:
+  42               	.LBE15:
+  43               	.LBE14:
+  44               	.LBE13:
+  45               	.LBE12:
+  46               	.LM3:
+  47 000c 0197      		sbiw r24,1
+  48 000e 4FEF      		ldi r20,hi8(-1)
+  49 0010 8F3F      		cpi r24,lo8(-1)
+  50 0012 9407      		cpc r25,r20
+  51 0014 01F4      		brne .L3
+  52               	/* epilogue start */
+  53               	.LM4:
+  54 0016 0895      		ret
+  55               	.LFE7:
+  57               		.data
+  58               	.LC0:
+  59 0000 4E65 776D 		.string	"Newman's touch circles.. "
+  59      616E 2773 
+  59      2074 6F75 
+  59      6368 2063 
+  59      6972 636C 
+  60               		.text
+  61               	.global	main
+  63               	main:
+  64               	.LFB8:
+  65               	.LM5:
+  66 0018 8F92      		push r8
+  67 001a 9F92      		push r9
+  68 001c AF92      		push r10
+  69 001e BF92      		push r11
+  70 0020 CF92      		push r12
+  71 0022 DF92      		push r13
+  72 0024 EF92      		push r14
+  73 0026 FF92      		push r15
+  74 0028 0F93      		push r16
+  75 002a 1F93      		push r17
+  76 002c DF93      		push r29
+  77 002e CF93      		push r28
+  78 0030 CDB7      		in r28,__SP_L__
+  79 0032 DEB7      		in r29,__SP_H__
+  80 0034 C856      		subi r28,lo8(-(-104))
+  81 0036 D040      		sbci r29,hi8(-(-104))
+  82 0038 0FB6      		in __tmp_reg__,__SREG__
+  83 003a F894      		cli
+  84 003c DEBF      		out __SP_H__,r29
+  85 003e 0FBE      		out __SREG__,__tmp_reg__
+  86 0040 CDBF      		out __SP_L__,r28
+  87               	/* prologue: function */
+  88               	/* frame size = 104 */
+  89               	.LM6:
+  90 0042 8E9A      		sbi 49-32,6
+  91               	.LM7:
+  92 0044 B89A      		sbi 55-32,0
+  93               	.LM8:
+  94 0046 969A      		sbi 50-32,6
+  95               	.LM9:
+  96 0048 C098      		cbi 56-32,0
+  97               	.LM10:
+  98 004a 8D98      		cbi 49-32,5
+  99 004c 959A      		sbi 50-32,5
+ 100               	.LM11:
+ 101 004e 8FEF      		ldi r24,lo8(-1)
+ 102 0050 84BB      		out 52-32,r24
+ 103               	.LM12:
+ 104 0052 0E94 0000 		call LCD_Init
+ 105               	.LM13:
+ 106 0056 0E94 0000 		call TOUCH_Calibrate
+ 107               	.LM14:
+ 108 005a 8599      		sbic 48-32,5
+ 109 005c 00C0      		rjmp .L6
+ 110               	.L29:
+ 111               	.LM15:
+ 112 005e 839B      		sbis 48-32,3
+ 113 0060 00C0      		rjmp .L29
+ 114               	.LM16:
+ 115 0062 8E01      		movw r16,r28
+ 116 0064 0B5F      		subi r16,lo8(-(5))
+ 117 0066 1F4F      		sbci r17,hi8(-(5))
+ 118 0068 C801      		movw r24,r16
+ 119 006a 60E0      		ldi r22,lo8(.LC0)
+ 120 006c 70E0      		ldi r23,hi8(.LC0)
+ 121 006e 0E94 0000 		call strcpy
+ 122               	.LM17:
+ 123 0072 82E3      		ldi r24,lo8(50)
+ 124 0074 90E0      		ldi r25,hi8(50)
+ 125 0076 6EE6      		ldi r22,lo8(110)
+ 126 0078 70E0      		ldi r23,hi8(110)
+ 127 007a A801      		movw r20,r16
+ 128 007c 20EE      		ldi r18,lo8(-32)
+ 129 007e 3FEF      		ldi r19,hi8(-32)
+ 130 0080 00E0      		ldi r16,lo8(0)
+ 131 0082 10E0      		ldi r17,hi8(0)
+ 132 0084 0E94 0000 		call LCD_WriteString
+ 133               	.L8:
+ 134               	.LM18:
+ 135 0088 8399      		sbic 48-32,3
+ 136 008a 00C0      		rjmp .L8
+ 137 008c 00C0      		rjmp .L39
+ 138               	.LVL2:
+ 139               	.L10:
+ 140               	.LBB16:
+ 141               	.LM19:
+ 142 008e 0E94 0000 		call rand
+ 143 0092 8C01      		movw r16,r24
+ 144 0094 0E94 0000 		call rand
+ 145 0098 7C01      		movw r14,r24
+ 146 009a 0E94 0000 		call rand
+ 147 009e 6C01      		movw r12,r24
+ 148 00a0 0E94 0000 		call rand
+ 149 00a4 9C01      		movw r18,r24
+ 150 00a6 C801      		movw r24,r16
+ 151 00a8 6FE3      		ldi r22,lo8(319)
+ 152 00aa 71E0      		ldi r23,hi8(319)
+ 153 00ac 0E94 0000 		call __divmodhi4
+ 154 00b0 8C01      		movw r16,r24
+ 155 00b2 C701      		movw r24,r14
+ 156 00b4 6FEE      		ldi r22,lo8(239)
+ 157 00b6 70E0      		ldi r23,hi8(239)
+ 158 00b8 0E94 0000 		call __divmodhi4
+ 159 00bc FC01      		movw r30,r24
+ 160 00be C601      		movw r24,r12
+ 161 00c0 64E6      		ldi r22,lo8(100)
+ 162 00c2 70E0      		ldi r23,hi8(100)
+ 163 00c4 0E94 0000 		call __divmodhi4
+ 164 00c8 AC01      		movw r20,r24
+ 165 00ca 220F      		lsl r18
+ 166 00cc 331F      		rol r19
+ 167 00ce C801      		movw r24,r16
+ 168 00d0 BF01      		movw r22,r30
+ 169 00d2 01E0      		ldi r16,lo8(1)
+ 170 00d4 0E94 0000 		call LCD_DrawCircle
+ 171               	.LM20:
+ 172 00d8 0894      		sec
+ 173 00da A11C      		adc r10,__zero_reg__
+ 174 00dc B11C      		adc r11,__zero_reg__
+ 175               	.L38:
+ 176 00de 82E3      		ldi r24,lo8(50)
+ 177 00e0 A816      		cp r10,r24
+ 178 00e2 B104      		cpc r11,__zero_reg__
+ 179 00e4 04F0      		brlt .L10
+ 180               	.L28:
+ 181               	.LBE16:
+ 182               	.LM21:
+ 183 00e6 8399      		sbic 48-32,3
+ 184 00e8 00C0      		rjmp .L28
+ 185               	.L39:
+ 186 00ea AA24      		clr r10
+ 187 00ec BB24      		clr r11
+ 188 00ee 00C0      		rjmp .L38
+ 189               	.LVL3:
+ 190               	.L6:
+ 191               	.LBB17:
+ 192               	.LM22:
+ 193 00f0 0E94 0000 		call TOUCH_Reset
+ 194 00f4 CC24      		clr r12
+ 195 00f6 C394      		inc r12
+ 196               	.LVL4:
+ 197 00f8 EE24      		clr r14
+ 198 00fa EA94      		dec r14
+ 199 00fc FE2C      		mov r15,r14
+ 200               	.LVL5:
+ 201               	.LM23:
+ 202 00fe 63E0      		ldi r22,lo8(3)
+ 203 0100 862E      		mov r8,r22
+ 204 0102 912C      		mov r9,__zero_reg__
+ 205 0104 8C0E      		add r8,r28
+ 206 0106 9D1E      		adc r9,r29
+ 207 0108 5E01      		movw r10,r28
+ 208 010a 0894      		sec
+ 209 010c A11C      		adc r10,__zero_reg__
+ 210 010e B11C      		adc r11,__zero_reg__
+ 211 0110 00C0      		rjmp .L37
+ 212               	.LVL6:
+ 213               	.L14:
+ 214               	.LM24:
+ 215 0112 859B      		sbis 48-32,5
+ 216 0114 00C0      		rjmp .L30
+ 217 0116 CC20      		tst r12
+ 218 0118 01F4      		brne .+2
+ 219 011a 00C0      		rjmp .L37
+ 220               	.L30:
+ 221               	.LM25:
+ 222 011c 859B      		sbis 48-32,5
+ 223 011e 00C0      		rjmp .L30
+ 224               	.LM26:
+ 225 0120 80E0      		ldi r24,lo8(0)
+ 226 0122 90E0      		ldi r25,hi8(0)
+ 227 0124 0E94 0000 		call LCD_Clear
+ 228               	.LM27:
+ 229 0128 80E0      		ldi r24,lo8(0)
+ 230 012a 90E0      		ldi r25,hi8(0)
+ 231 012c 68EC      		ldi r22,lo8(200)
+ 232 012e 70E0      		ldi r23,hi8(200)
+ 233 0130 48E2      		ldi r20,lo8(40)
+ 234 0132 50E0      		ldi r21,hi8(40)
+ 235 0134 23E2      		ldi r18,lo8(35)
+ 236 0136 30E0      		ldi r19,hi8(35)
+ 237 0138 00E0      		ldi r16,lo8(0)
+ 238 013a 10E0      		ldi r17,hi8(0)
+ 239 013c 0E94 0000 		call LCD_Fill
+ 240               	.LM28:
+ 241 0140 88E2      		ldi r24,lo8(40)
+ 242 0142 90E0      		ldi r25,hi8(40)
+ 243 0144 68EC      		ldi r22,lo8(200)
+ 244 0146 70E0      		ldi r23,hi8(200)
+ 245 0148 48E2      		ldi r20,lo8(40)
+ 246 014a 50E0      		ldi r21,hi8(40)
+ 247 014c 23E2      		ldi r18,lo8(35)
+ 248 014e 30E0      		ldi r19,hi8(35)
+ 249 0150 0FE1      		ldi r16,lo8(31)
+ 250 0152 10E0      		ldi r17,hi8(31)
+ 251 0154 0E94 0000 		call LCD_Fill
+ 252               	.LM29:
+ 253 0158 80E5      		ldi r24,lo8(80)
+ 254 015a 90E0      		ldi r25,hi8(80)
+ 255 015c 68EC      		ldi r22,lo8(200)
+ 256 015e 70E0      		ldi r23,hi8(200)
+ 257 0160 48E2      		ldi r20,lo8(40)
+ 258 0162 50E0      		ldi r21,hi8(40)
+ 259 0164 23E2      		ldi r18,lo8(35)
+ 260 0166 30E0      		ldi r19,hi8(35)
+ 261 0168 00EE      		ldi r16,lo8(2016)
+ 262 016a 17E0      		ldi r17,hi8(2016)
+ 263 016c 0E94 0000 		call LCD_Fill
+ 264               	.LM30:
+ 265 0170 88E7      		ldi r24,lo8(120)
+ 266 0172 90E0      		ldi r25,hi8(120)
+ 267 0174 68EC      		ldi r22,lo8(200)
+ 268 0176 70E0      		ldi r23,hi8(200)
+ 269 0178 48E2      		ldi r20,lo8(40)
+ 270 017a 50E0      		ldi r21,hi8(40)
+ 271 017c 23E2      		ldi r18,lo8(35)
+ 272 017e 30E0      		ldi r19,hi8(35)
+ 273 0180 00E0      		ldi r16,lo8(-2048)
+ 274 0182 18EF      		ldi r17,hi8(-2048)
+ 275 0184 0E94 0000 		call LCD_Fill
+ 276               	.LM31:
+ 277 0188 80EA      		ldi r24,lo8(160)
+ 278 018a 90E0      		ldi r25,hi8(160)
+ 279 018c 68EC      		ldi r22,lo8(200)
+ 280 018e 70E0      		ldi r23,hi8(200)
+ 281 0190 48E2      		ldi r20,lo8(40)
+ 282 0192 50E0      		ldi r21,hi8(40)
+ 283 0194 23E2      		ldi r18,lo8(35)
+ 284 0196 30E0      		ldi r19,hi8(35)
+ 285 0198 0FE1      		ldi r16,lo8(-2017)
+ 286 019a 18EF      		ldi r17,hi8(-2017)
+ 287 019c 0E94 0000 		call LCD_Fill
+ 288               	.LM32:
+ 289 01a0 88EC      		ldi r24,lo8(200)
+ 290 01a2 90E0      		ldi r25,hi8(200)
+ 291 01a4 68EC      		ldi r22,lo8(200)
+ 292 01a6 70E0      		ldi r23,hi8(200)
+ 293 01a8 48E2      		ldi r20,lo8(40)
+ 294 01aa 50E0      		ldi r21,hi8(40)
+ 295 01ac 23E2      		ldi r18,lo8(35)
+ 296 01ae 30E0      		ldi r19,hi8(35)
+ 297 01b0 00E0      		ldi r16,lo8(-1024)
+ 298 01b2 1CEF      		ldi r17,hi8(-1024)
+ 299 01b4 0E94 0000 		call LCD_Fill
+ 300               	.LM33:
+ 301 01b8 80EF      		ldi r24,lo8(240)
+ 302 01ba 90E0      		ldi r25,hi8(240)
+ 303 01bc 68EC      		ldi r22,lo8(200)
+ 304 01be 70E0      		ldi r23,hi8(200)
+ 305 01c0 48E2      		ldi r20,lo8(40)
+ 306 01c2 50E0      		ldi r21,hi8(40)
+ 307 01c4 23E2      		ldi r18,lo8(35)
+ 308 01c6 30E0      		ldi r19,hi8(35)
+ 309 01c8 00EE      		ldi r16,lo8(-32)
+ 310 01ca 1FEF      		ldi r17,hi8(-32)
+ 311 01cc 0E94 0000 		call LCD_Fill
+ 312               	.LM34:
+ 313 01d0 88E1      		ldi r24,lo8(280)
+ 314 01d2 91E0      		ldi r25,hi8(280)
+ 315 01d4 68EC      		ldi r22,lo8(200)
+ 316 01d6 70E0      		ldi r23,hi8(200)
+ 317 01d8 48E2      		ldi r20,lo8(40)
+ 318 01da 50E0      		ldi r21,hi8(40)
+ 319 01dc 23E2      		ldi r18,lo8(35)
+ 320 01de 30E0      		ldi r19,hi8(35)
+ 321 01e0 0FEF      		ldi r16,lo8(-1)
+ 322 01e2 1FEF      		ldi r17,hi8(-1)
+ 323 01e4 0E94 0000 		call LCD_Fill
+ 324               	.LM35:
+ 325 01e8 80E0      		ldi r24,lo8(0)
+ 326 01ea 90E0      		ldi r25,hi8(0)
+ 327 01ec 6BEE      		ldi r22,lo8(235)
+ 328 01ee 70E0      		ldi r23,hi8(235)
+ 329 01f0 40E4      		ldi r20,lo8(320)
+ 330 01f2 51E0      		ldi r21,hi8(320)
+ 331 01f4 25E0      		ldi r18,lo8(5)
+ 332 01f6 30E0      		ldi r19,hi8(5)
+ 333 01f8 8701      		movw r16,r14
+ 334 01fa 0E94 0000 		call LCD_Fill
+ 335 01fe CC24      		clr r12
+ 336               	.L37:
+ 337               	.LM36:
+ 338 0200 8399      		sbic 48-32,3
+ 339 0202 00C0      		rjmp .L14
+ 340               	.LM37:
+ 341 0204 C501      		movw r24,r10
+ 342 0206 B401      		movw r22,r8
+ 343 0208 0E94 0000 		call TOUCH_Get
+ 344 020c 8823      		tst r24
+ 345 020e 01F0      		breq .L37
+ 346               	.LM38:
+ 347 0210 6B81      		ldd r22,Y+3
+ 348 0212 7C81      		ldd r23,Y+4
+ 349 0214 8981      		ldd r24,Y+1
+ 350 0216 9A81      		ldd r25,Y+2
+ 351 0218 663C      		cpi r22,198
+ 352 021a 7105      		cpc r23,__zero_reg__
+ 353 021c 04F4      		brge .L15
+ 354               	.LVL7:
+ 355               	.LM39:
+ 356 021e 41E0      		ldi r20,lo8(1)
+ 357 0220 50E0      		ldi r21,hi8(1)
+ 358 0222 9701      		movw r18,r14
+ 359 0224 01E0      		ldi r16,lo8(1)
+ 360 0226 0E94 0000 		call LCD_DrawCircle
+ 361               	.LVL8:
+ 362 022a 00C0      		rjmp .L37
+ 363               	.LVL9:
+ 364               	.L15:
+ 365               	.LM40:
+ 366 022c 68E2      		ldi r22,lo8(40)
+ 367 022e 70E0      		ldi r23,hi8(40)
+ 368 0230 0E94 0000 		call __divmodhi4
+ 369               	.LVL10:
+ 370 0234 7B01      		movw r14,r22
+ 371               	.LM41:
+ 372 0236 6430      		cpi r22,4
+ 373 0238 7105      		cpc r23,__zero_reg__
+ 374 023a 01F0      		breq .L20
+ 375               	.LVL11:
+ 376 023c 6530      		cpi r22,5
+ 377 023e 7105      		cpc r23,__zero_reg__
+ 378 0240 00F4      		brsh .L24
+ 379 0242 6230      		cpi r22,2
+ 380 0244 7105      		cpc r23,__zero_reg__
+ 381 0246 01F0      		breq .L18
+ 382 0248 6330      		cpi r22,3
+ 383 024a 7105      		cpc r23,__zero_reg__
+ 384 024c 00F4      		brsh .L19
+ 385 024e 6130      		cpi r22,1
+ 386 0250 7105      		cpc r23,__zero_reg__
+ 387 0252 01F4      		brne .L16
+ 388 0254 00C0      		rjmp .L40
+ 389               	.L24:
+ 390 0256 6630      		cpi r22,6
+ 391 0258 7105      		cpc r23,__zero_reg__
+ 392 025a 01F0      		breq .L22
+ 393 025c 6630      		cpi r22,6
+ 394 025e 7105      		cpc r23,__zero_reg__
+ 395 0260 00F0      		brlo .L21
+ 396 0262 6730      		cpi r22,7
+ 397 0264 7105      		cpc r23,__zero_reg__
+ 398 0266 01F4      		brne .L16
+ 399 0268 00C0      		rjmp .L41
+ 400               	.L40:
+ 401 026a 5FE1      		ldi r21,lo8(31)
+ 402 026c E52E      		mov r14,r21
+ 403 026e F12C      		mov r15,__zero_reg__
+ 404               	.LVL12:
+ 405 0270 00C0      		rjmp .L16
+ 406               	.LVL13:
+ 407               	.L18:
+ 408               	.LM42:
+ 409 0272 40EE      		ldi r20,lo8(2016)
+ 410 0274 E42E      		mov r14,r20
+ 411 0276 47E0      		ldi r20,hi8(2016)
+ 412 0278 F42E      		mov r15,r20
+ 413               	.LVL14:
+ 414 027a 00C0      		rjmp .L16
+ 415               	.LVL15:
+ 416               	.L19:
+ 417               	.LM43:
+ 418 027c E12C      		mov r14,__zero_reg__
+ 419 027e 38EF      		ldi r19,hi8(-2048)
+ 420 0280 F32E      		mov r15,r19
+ 421               	.LVL16:
+ 422 0282 00C0      		rjmp .L16
+ 423               	.LVL17:
+ 424               	.L20:
+ 425               	.LM44:
+ 426 0284 2FE1      		ldi r18,lo8(-2017)
+ 427 0286 E22E      		mov r14,r18
+ 428 0288 28EF      		ldi r18,hi8(-2017)
+ 429 028a F22E      		mov r15,r18
+ 430               	.LVL18:
+ 431 028c 00C0      		rjmp .L16
+ 432               	.LVL19:
+ 433               	.L21:
+ 434               	.LM45:
+ 435 028e E12C      		mov r14,__zero_reg__
+ 436 0290 9CEF      		ldi r25,hi8(-1024)
+ 437 0292 F92E      		mov r15,r25
+ 438               	.LVL20:
+ 439 0294 00C0      		rjmp .L16
+ 440               	.LVL21:
+ 441               	.L22:
+ 442               	.LM46:
+ 443 0296 80EE      		ldi r24,lo8(-32)
+ 444 0298 E82E      		mov r14,r24
+ 445 029a 8FEF      		ldi r24,hi8(-32)
+ 446 029c F82E      		mov r15,r24
+ 447               	.LVL22:
+ 448 029e 00C0      		rjmp .L16
+ 449               	.LVL23:
+ 450               	.L41:
+ 451               	.LM47:
+ 452 02a0 EE24      		clr r14
+ 453 02a2 EA94      		dec r14
+ 454 02a4 FE2C      		mov r15,r14
+ 455               	.LVL24:
+ 456               	.L16:
+ 457               	.LM48:
+ 458 02a6 80E0      		ldi r24,lo8(0)
+ 459 02a8 90E0      		ldi r25,hi8(0)
+ 460 02aa 6BEE      		ldi r22,lo8(235)
+ 461 02ac 70E0      		ldi r23,hi8(235)
+ 462 02ae 40E4      		ldi r20,lo8(320)
+ 463 02b0 51E0      		ldi r21,hi8(320)
+ 464 02b2 25E0      		ldi r18,lo8(5)
+ 465 02b4 30E0      		ldi r19,hi8(5)
+ 466 02b6 8701      		movw r16,r14
+ 467 02b8 0E94 0000 		call LCD_Fill
+ 468               	.L25:
+ 469               	.LM49:
+ 470 02bc 839B      		sbis 48-32,3
+ 471 02be 00C0      		rjmp .L25
+ 472 02c0 00C0      		rjmp .L37
+ 473               	.LBE17:
+ 474               	.LFE8:
+ 508               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:2      *ABS*:0000003f __SREG__
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:3      *ABS*:0000003e __SP_H__
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:4      *ABS*:0000003d __SP_L__
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:5      *ABS*:00000034 __CCP__
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:18     .text:00000000 delay_ms
+C:\Users\Newman\AppData\Local\Temp/ccf60pOk.s:63     .text:00000018 main
+
+UNDEFINED SYMBOLS
+LCD_Init
+TOUCH_Calibrate
+strcpy
+LCD_WriteString
+rand
+__divmodhi4
+LCD_DrawCircle
+TOUCH_Reset
+LCD_Clear
+LCD_Fill
+TOUCH_Get
+__do_copy_data

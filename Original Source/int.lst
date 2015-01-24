@@ -1,0 +1,171 @@
+   1               		.file	"int.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	Init_INT0
+  18               	Init_INT0:
+  19               	.LFB2:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 8FB7      		in r24,__SREG__
+  25 0002 8068      		ori r24,lo8(-128)
+  26 0004 8FBF      		out __SREG__,r24
+  27               	.LM3:
+  28 0006 85B7      		in r24,85-32
+  29 0008 8260      		ori r24,lo8(2)
+  30 000a 85BF      		out 85-32,r24
+  31               	.LM4:
+  32 000c 80E4      		ldi r24,lo8(64)
+  33 000e 8BBF      		out 91-32,r24
+  34               	/* epilogue start */
+  35               	.LM5:
+  36 0010 0895      		ret
+  37               	.LFE2:
+  39               	.global	__vector_1
+  41               	__vector_1:
+  42               	.LFB3:
+  43               	.LM6:
+  44 0012 1F92      		push __zero_reg__
+  45 0014 0F92      		push r0
+  46 0016 0FB6      		in r0,__SREG__
+  47 0018 0F92      		push r0
+  48 001a 1124      		clr __zero_reg__
+  49 001c 2F93      		push r18
+  50 001e 3F93      		push r19
+  51 0020 4F93      		push r20
+  52 0022 5F93      		push r21
+  53 0024 6F93      		push r22
+  54 0026 7F93      		push r23
+  55 0028 8F93      		push r24
+  56 002a 9F93      		push r25
+  57 002c AF93      		push r26
+  58 002e BF93      		push r27
+  59 0030 EF93      		push r30
+  60 0032 FF93      		push r31
+  61               	/* prologue: Signal */
+  62               	/* frame size = 0 */
+  63               	.LM7:
+  64               	/* #APP */
+  65               	 ;  23 "int.c" 1
+  66 0034 F894      		cli
+  67               	 ;  0 "" 2
+  68               	.LM8:
+  69               	/* #NOAPP */
+  70 0036 C098      		cbi 56-32,0
+  71               	.LM9:
+  72 0038 969A      		sbi 50-32,6
+  73               	.LM10:
+  74 003a 8FEF      		ldi r24,lo8(-1)
+  75 003c 84BB      		out 52-32,r24
+  76               	.LM11:
+  77 003e 80E2      		ldi r24,lo8(32)
+  78 0040 90E0      		ldi r25,hi8(32)
+  79 0042 60E0      		ldi r22,lo8(0)
+  80 0044 70E0      		ldi r23,hi8(0)
+  81 0046 0E94 0000 		call LCD_WR_REG
+  82               	.LM12:
+  83 004a 81E2      		ldi r24,lo8(33)
+  84 004c 90E0      		ldi r25,hi8(33)
+  85 004e 60E0      		ldi r22,lo8(0)
+  86 0050 70E0      		ldi r23,hi8(0)
+  87 0052 0E94 0000 		call LCD_WR_REG
+  88               	.LM13:
+  89 0056 80E5      		ldi r24,lo8(80)
+  90 0058 90E0      		ldi r25,hi8(80)
+  91 005a 60E0      		ldi r22,lo8(0)
+  92 005c 70E0      		ldi r23,hi8(0)
+  93 005e 0E94 0000 		call LCD_WR_REG
+  94               	.LM14:
+  95 0062 81E5      		ldi r24,lo8(81)
+  96 0064 90E0      		ldi r25,hi8(81)
+  97 0066 6FEE      		ldi r22,lo8(239)
+  98 0068 70E0      		ldi r23,hi8(239)
+  99 006a 0E94 0000 		call LCD_WR_REG
+ 100               	.LM15:
+ 101 006e 82E5      		ldi r24,lo8(82)
+ 102 0070 90E0      		ldi r25,hi8(82)
+ 103 0072 60E0      		ldi r22,lo8(0)
+ 104 0074 70E0      		ldi r23,hi8(0)
+ 105 0076 0E94 0000 		call LCD_WR_REG
+ 106               	.LM16:
+ 107 007a 83E5      		ldi r24,lo8(83)
+ 108 007c 90E0      		ldi r25,hi8(83)
+ 109 007e 6FE3      		ldi r22,lo8(319)
+ 110 0080 71E0      		ldi r23,hi8(319)
+ 111 0082 0E94 0000 		call LCD_WR_REG
+ 112               	.LM17:
+ 113 0086 83E0      		ldi r24,lo8(3)
+ 114 0088 90E0      		ldi r25,hi8(3)
+ 115 008a 68E2      		ldi r22,lo8(4136)
+ 116 008c 70E1      		ldi r23,hi8(4136)
+ 117 008e 0E94 0000 		call LCD_WR_REG
+ 118               	.LM18:
+ 119 0092 82E2      		ldi r24,lo8(34)
+ 120 0094 90E0      		ldi r25,hi8(34)
+ 121 0096 0E94 0000 		call LCD_WR_REG16
+ 122               	.LM19:
+ 123 009a DD98      		cbi 59-32,5
+ 124               	.LM20:
+ 125 009c 14BA      		out 52-32,__zero_reg__
+ 126               	.LM21:
+ 127 009e DE9A      		sbi 59-32,6
+ 128               	.LM22:
+ 129 00a0 C39A      		sbi 56-32,3
+ 130               	.LM23:
+ 131 00a2 C09A      		sbi 56-32,0
+ 132               	.LM24:
+ 133 00a4 9698      		cbi 50-32,6
+ 134               	.LM25:
+ 135               	/* #APP */
+ 136               	 ;  59 "int.c" 1
+ 137 00a6 7894      		sei
+ 138               	 ;  0 "" 2
+ 139               	/* epilogue start */
+ 140               	.LM26:
+ 141               	/* #NOAPP */
+ 142 00a8 FF91      		pop r31
+ 143 00aa EF91      		pop r30
+ 144 00ac BF91      		pop r27
+ 145 00ae AF91      		pop r26
+ 146 00b0 9F91      		pop r25
+ 147 00b2 8F91      		pop r24
+ 148 00b4 7F91      		pop r23
+ 149 00b6 6F91      		pop r22
+ 150 00b8 5F91      		pop r21
+ 151 00ba 4F91      		pop r20
+ 152 00bc 3F91      		pop r19
+ 153 00be 2F91      		pop r18
+ 154 00c0 0F90      		pop r0
+ 155 00c2 0FBE      		out __SREG__,r0
+ 156 00c4 0F90      		pop r0
+ 157 00c6 1F90      		pop __zero_reg__
+ 158 00c8 1895      		reti
+ 159               	.LFE3:
+ 161               	.global	val1
+ 162               	.global	val1
+ 163               		.section .bss
+ 166               	val1:
+ 167 0000 00        		.skip 1,0
+ 200               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 int.c
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:2      *ABS*:0000003f __SREG__
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:3      *ABS*:0000003e __SP_H__
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:4      *ABS*:0000003d __SP_L__
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:5      *ABS*:00000034 __CCP__
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:18     .text:00000000 Init_INT0
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:41     .text:00000012 __vector_1
+C:\Users\Newman\AppData\Local\Temp/cc7Bu1PH.s:166    .bss:00000000 val1
+
+UNDEFINED SYMBOLS
+LCD_WR_REG
+LCD_WR_REG16
+__do_clear_bss
